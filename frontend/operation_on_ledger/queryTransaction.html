@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Transaction</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #query-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        #query-result {
+            margin-top: 20px;
+        }
+
+        #patient-name,
+        #temperature,
+        #heart-rate,
+        #blood-pressure,
+        #spo2 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="query-form">
+        <h2>Query Transaction</h2>
+        <form id="query-form">
+            <label for="patient-id">Patient ID:</label>
+            <input type="text" id="patient-id" required>
+            <br><br>
+            <label for="authorization-token">Authorization Token:</label>
+            <input type="text" id="authorization-token" required>
+            <br><br>
+            <button type="button" onclick="queryTransaction()">Query Transaction</button>
+        </form>
+
+        <div id="query-result" style="display:none;">
+            <p id="patient-name"></p>
+            <p id="temperature"></p>
+            <p id="heart-rate"></p>
+            <p id="blood-pressure"></p>
+            <p id="spo2"></p>
+        </div>
+    </div>
+
+    <!-- Include the external script file -->
+    <!-- <script src="scriptQueryTransaction.js"></script> -->
+    <script>
+        // scriptQueryTransaction.js
+
+        async function queryTransaction() {
+            const patientId = document.getElementById('patient-id').value;
+            const authToken = document.getElementById('authorization-token').value;
+
+            const apiUrl = `http://localhost:4000/channels/mychannel/chaincodes/fabcar?args=["${patientId}"]&peer=peer0.org1.example.com&fcn=queryCar`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                });
+
+                const result = await response.json();
+
+                if (result) {
+                    document.getElementById('patient-name').innerText = `Patient Name: ${result.patient}`;
+                    document.getElementById('temperature').innerText = `Temperature: ${result.temperature}`;
+                    document.getElementById('heart-rate').innerText = `Heart Rate: ${result.heartrate}`;
+                    document.getElementById('blood-pressure').innerText = `Blood Pressure: ${result.bp}`;
+                    document.getElementById('spo2').innerText = `SPO2: ${result.spo2}`;
+                    document.getElementById('query-result').style.display = 'block';
+                } else {
+                    console.error('Error during query transaction:', result.errorData);
+                    document.getElementById('query-result').innerHTML = '<p>Error during query transaction</p>';
+                }
+            } catch (error) {
+                console.error('Error during query transaction:', error);
+                document.getElementById('query-result').innerHTML = '<p>Error during query transaction</p>';
+            }
+        }
+
+    </script>
+</body>
+
+</html>

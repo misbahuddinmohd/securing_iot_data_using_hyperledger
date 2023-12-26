@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>User Registration</h2>
+
+  <form id="registrationForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="orgName">Organization Name:</label>
+    <input type="text" id="orgName" name="orgName" required>
+
+    <button type="button" onclick="registerUser()">Register</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    async function registerUser() {
+      const username = document.getElementById('username').value;
+      const orgName = document.getElementById('orgName').value;
+
+      const data = {
+        username: username,
+        orgName: orgName
+      };
+
+      try {
+        const response = await fetch('http://localhost:4000/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          document.getElementById('result').innerHTML = `<p>${result.message}</p>
+            <p>Token: ${result.token}</p>`;
+        } else {
+          document.getElementById('result').innerHTML = `<p>Error: ${result.message}</p>`;
+        }
+      } catch (error) {
+        console.error('Error during registration:', error);
+        document.getElementById('result').innerHTML = '<p>Error during registration</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>

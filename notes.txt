@@ -1,0 +1,10 @@
+edit the attributes of function in fabcar.go
+1. quertCar  (query transaction)
+2. initLedger (optional)
+3. createCar (invoke transaction)
+4. changeCarOwner (update transaction)
+5. getHistoryForAsset (get history of asset)
+
+
+
+

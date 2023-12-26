@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Transaction</title>
+    <style>
+        /* Your CSS styles here */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #update-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        #update-result {
+            margin-top: 20px;
+        }
+
+        #tx-id, #error, #error-data {
+            margin-bottom: 10px;
+        }
+
+        #copy-tx-id-button {
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px; /* Add margin-top for better spacing */
+        }
+
+        #copy-tx-id-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="update-form">
+        <h2>Update Transaction</h2>
+        <form id="update-form">
+            <label for="patient-id">Patient ID:</label>
+            <input type="text" id="patient-id" required>
+            <br><br>
+            <label for="temperature">Temperature:</label>
+            <input type="text" id="temperature" required>
+            <br><br>
+            <label for="heart-rate">Heart Rate:</label>
+            <input type="text" id="heart-rate" required>
+            <br><br>
+            <label for="blood-pressure">Blood Pressure:</label>
+            <input type="text" id="blood-pressure" required>
+            <br><br>
+            <label for="spo2">Spo2:</label>
+            <input type="text" id="spo2" required>
+            <br><br>
+            <label for="patient-name">Patient Name:</label>
+            <input type="text" id="patient-name" required>
+            <br><br>
+            <label for="authorization-token">Authorization Token:</label>
+            <input type="text" id="authorization-token" required>
+            <br><br>
+            <button type="button" onclick="updateTransaction()">Update Transaction</button>
+        </form>
+
+        <div id="update-result" style="display:none;">
+            <p id="tx-id"></p>
+            <p id="error"></p>
+            <p id="error-data"></p>
+            <button id="copy-tx-id-button" onclick="copyTxId()">Copy tx_id</button>
+        </div>
+    </div>
+
+    <!-- Include the external script file -->
+    <script src="scriptUpdateTransaction.js"></script>
+</body>
+</html>

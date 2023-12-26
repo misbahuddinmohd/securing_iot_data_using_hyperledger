@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        /* body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #registration-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        } */
+
+        #token-display {
+            margin-top: 20px;
+            word-wrap: break-word; /* This will break long words to the next line */
+            overflow-wrap: break-word; /* This is for non-webkit browsers */
+            
+        }
+
+        #message, #token {
+            margin-bottom: 10px;
+        }
+
+        #copy-button {
+            cursor: pointer;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        #copy-button:hover {
+            background-color: #45a049;
+        } 
+    </style>
+</head>
+<body>
+    <div id="registration-form">
+        <h2>Doctor Registration</h2>
+        <form id="user-registration-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <br><br>
+            <button type="button" onclick="registerUser()">Register</button>
+        </form>
+
+        <div id="token-display" style="display:none;">
+            <p id="message"></p>
+            <p id="token"></p>
+            <button id="copy-button" onclick="copyToken()">Copy Token</button>
+        </div>
+    </div>
+
+
+    <!-- Include the external script file -->
+    <!-- <script src="scriptRegisterUser.js"></script> -->
+</body>
+</html>

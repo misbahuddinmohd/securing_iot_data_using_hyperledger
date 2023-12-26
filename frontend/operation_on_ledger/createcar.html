@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Car Asset</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Create Car Asset</h2>
+
+  <form id="createCarForm">
+    <label for="carName">Car Name:</label>
+    <input type="text" id="carName" name="carName" required>
+
+    <label for="carBrand">Car Brand:</label>
+    <input type="text" id="carBrand" name="carBrand" required>
+
+    <label for="carModel">Car Model:</label>
+    <input type="text" id="carModel" name="carModel" required>
+
+    <label for="carColor">Car Color:</label>
+    <input type="text" id="carColor" name="carColor" required>
+
+    <label for="owner">Owner:</label>
+    <input type="text" id="owner" name="owner" required>
+
+    <button type="button" onclick="createCar()">Create Car Asset</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    async function createCar() {
+      const carName = document.getElementById('carName').value;
+      const carBrand = document.getElementById('carBrand').value;
+      const carModel = document.getElementById('carModel').value;
+      const carColor = document.getElementById('carColor').value;
+      const owner = document.getElementById('owner').value;
+
+      const args = [carName, carBrand, carModel, carColor, owner];
+
+      const data = {
+        fcn: 'createCar',
+        peers: ["peer0.org1.example.com", "peer0.org2.example.com"],
+        chaincodeName: 'fabcar',
+        channelName: 'mychannel',
+        args: args
+      };
+
+      try {
+        const token = getToken(); // Implement the function to get the token
+        const response = await fetch('http://localhost:4000/channels/mychannel/chaincodes/fabcar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.result && result.result.tx_id) {
+          document.getElementById('result').innerHTML = `<p>Asset added Successfully</p>
+            <p>Transaction ID: ${result.result.tx_id}</p>`;
+        } else {
+          document.getElementById('result').innerHTML = `<p>Error: ${result.errorData}</p>`;
+        }
+      } catch (error) {
+        console.error('Error during asset creation:', error);
+        document.getElementById('result').innerHTML = '<p>Error during asset creation</p>';
+      }
+    }
+
+    function getToken() {
+      // Implement the function to get the token from the user's session or storage
+      // You may use sessionStorage, localStorage, or cookies to store the token
+      // Return the token value
+      // Example: return sessionStorage.getItem('token');
+      let tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDIxNjQ2NDcsInVzZXJuYW1lIjoidGVzdHVzZXIxIiwib3JnTmFtZSI6Ik9yZzEiLCJpYXQiOjE3MDIxMjg2NDd9.grjNebhu7nPHVzfzx6SS3YJQoAiqY5rVQSW3N_Tq8AI";
+      return tok;
+    }
+  </script>
+
+</body>
+</html>

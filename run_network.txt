@@ -1,0 +1,6 @@
+sudo docker-compose up -d
+
+./createChannel.sh
+./deployChaincode.sh
+
+sudo docker-compose down

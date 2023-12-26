@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #f8f9fa;
+            margin: 0;
+            display: flex;
+            flex-direction: row;
+        }
+
+        #leftSection {
+            width: 600px;
+            background-color: #343a40;
+            padding: 20px;
+            height: 100%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #intro {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #simulator-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #000000;
+        }
+
+        /* label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        } */
+
+        #patientId,
+        #patientName,
+        #authToken {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        /* input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        } */
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .sensor {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            
+        }
+
+        .sensor img {
+            max-width: 70px;
+            max-height: 70px;
+            margin-right: 10px;
+        }
+
+        .sensor-value {
+            font-size: 17px;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        #rightSection {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+        }
+
+        .nav-link {
+            color: white !important;
+        }
+
+        .content {
+            padding: 20px;
+            overflow: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="leftSection">
+        <div id="intro">
+            <h1>IOT Simulator</h1>
+        </div>
+        <div id="simulator-container">
+            <label for="patientId">Patient ID:</label>
+            <input type="text" id="patientId" placeholder="Enter patient ID">
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName" placeholder="Enter patient name">
+            <label for="authToken">Authorization Token:</label>
+            <input type="text" id="authToken" placeholder="Enter authorization token">
+            <br>
+            <button onclick="startSimulation()">Start Simulator</button>
+            <button onclick="stopSimulation()">Stop Simulator</button>
+
+            <div class="sensor" id="temperature-sensor">
+                <img src="/img/temperature.png" alt="Temperature Sensor">
+                <div id="temperature-value" class="sensor-value">Temperature: - °C</div>
+            </div>
+            <div class="sensor" id="heartRate-sensor">
+                <img src="/img/heartrate.png" alt="Heart Rate Sensor">
+                <div id="heartRate-value" class="sensor-value">Heart Rate: - BPM</div>
+            </div>
+            <div class="sensor" id="bloodPressure-sensor">
+                <img src="/img/bloodpressure.png" alt="Blood Pressure Sensor">
+                <div id="bloodPressure-value" class="sensor-value">Blood Pressure: -</div>
+            </div>
+            <div class="sensor" id="spo2-sensor">
+                <img src="/img/spo2.png" alt="SPO2 Sensor">
+                <div id="spo2-value" class="sensor-value">SPO2: - %</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rightSection">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showInvokeTransaction()">Invoke Transaction</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showQueryTransaction()">Query Transaction</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showUpdateTransaction()">Update Transaction</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showAssetHistory()">Get Asset History</a>
+                </li>
+                <!-- Add more items as needed -->
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="content" id="mainContent">
+            <!-- Content will be dynamically replaced based on patient's actions -->
+            <h2>Welcome, Patient!</h2>
+            <p>Select an option from the sidebar or navbar.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Include the external script file -->
+    <script src="/scripts/scriptPatient.js"></script>
+    <script src="/scripts/ledgerOperations.js"></script>
+</body>
+
+</html>

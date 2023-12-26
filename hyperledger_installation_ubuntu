@@ -1,0 +1,89 @@
+# install curl
+sudo apt-get install curl
+
+------------------------------------------------------
+# install go 1.13.x 
+wget https://golang.org/dl/go1.13.8.linux-amd64.tar.gz
+tar -xzvf go1.13.8.linux-amd64.tar.gz
+sudo mv go/ /usr/local
+
+# now open bashrc file and set paths
+export PATH=$PATH:/usr/local/go/bin:/home/misbah/.go/bin
+export GOPATH=/home/misbah/go
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOPATH/bin
+
+source ~/.bashrc
+
+#check go version
+go version
+
+------------------------------------------------------------------------------------------------------------------------
+
+# install nodejs, npm, python3
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo apt-get install python3
+
+------------------------------------------------------------------------------------------------------------------------
+
+# install docker and docker-compose
+sudo apt-get install curl 
+sudo apt-get install gnupg 
+sudo apt-get install ca-certificates 
+sudo apt-get install lsb-release
+sudo mkdir -p /etc/apt/keyrings 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+----------------------------------------------------
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+------------------------- now docker-compose  ----------------------
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+------------------------------------------
+# check whether docker and docker-compose are installed or not
+sudo docker --version
+docker-compose version
+--------------------------------------------------------------------------------------------------------------------------
+
+
+# installing hyperledger
+
+mkdir testfolder
+cd testfolder
+sudo chmod 777 /var/run/docker.sock
+curl -sSL https://bit.ly/2ysbOFE | bash -s -- 2.0.1 1.4.6 0.4.18
+#(note if yours is a jio internet connection then use DNS 8.8.8.8 in IPV4)
+
+#now goto fabric-samples/bin in testfolder and copy the path, put that path in bashrc file
+cd fabric-samples/bin
+pwd #(copy path)
+
+export PATH=$PATH:/home/misbah/testfolder/fabric-samples/bin  (put this in bashrc)
+source ~/.bashrc
+
+#to check if path is set correctly or not enter peer and u will get to see command help
+peer
+
+# now goto pavan adhav youtube channel and follow his playlist

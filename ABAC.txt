@@ -1,0 +1,27 @@
+operations that can be performed:
+1. registerUser - Admin
+2. invokeTransaction - Admin, Doctor
+3. queryTransaction - Admin, Doctor, Patient
+4. updateTransaction - Admin, Patient
+5. getHistoryForAsset - Admin, Doctor, Patient
+
+entities:
+
+Admin:
+1. registerUser
+2. invokeTransaction
+3. queryTransaction
+4. updateTransaction
+5. getHistoryForAsset
+
+Doctor
+1. invokeTransaction
+2. queryTransaction
+3. getHistoryForAsset
+
+Patient
+1. invokeTransaction
+2. queryTransaction
+3. updateTransaction
+4. getHistoryForAsset
+

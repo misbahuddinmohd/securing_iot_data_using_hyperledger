@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Your CSS styles here */
+        /* body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #query-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        } */
+
+        #query-result {
+            margin-top: 20px;
+        }
+
+        #patient-name,
+        #temperature,
+        #heart-rate,
+        #blood-pressure,
+        #spo2 {
+            margin-bottom: 10px;
+        } 
+    </style>
+</head>
+
+<body>
+    <div id="query-form">
+        <h2>Query Transaction</h2>
+        <form id="query-form">
+            <label for="patient-id">Patient ID:</label>
+            <input type="text" id="patient-id" required>
+            <br><br>
+            <label for="authorization-token">Authorization Token:</label>
+            <input type="text" id="authorization-token" required>
+            <br><br>
+            <button type="button" onclick="queryTransaction()">Query Transaction</button>
+        </form>
+
+        <div id="query-result" style="display:none;">
+            <p id="patient-name"></p>
+            <p id="temperature"></p>
+            <p id="heart-rate"></p>
+            <p id="blood-pressure"></p>
+            <p id="spo2"></p>
+        </div>
+    </div>
+
+    <!-- Include the external script file -->
+    <!-- <script src="scripts/ledgerOperations.js"></script> -->
+</body>
+
+</html>
