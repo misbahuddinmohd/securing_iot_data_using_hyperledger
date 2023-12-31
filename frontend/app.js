@@ -16,6 +16,8 @@ app.use('/admin', adminController);
 const patientController = require('./controllers/patientController');
 app.use('/patient', patientController);
 
+const doctorController = require('./controllers/doctorController');
+app.use('/doctor', doctorController);
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

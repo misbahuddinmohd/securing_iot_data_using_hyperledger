@@ -19,13 +19,15 @@ router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin/admin.html'));
 });
 
-router.get('/registerPatient', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/admin/registerPatient.html'));
+router.get('/showPatients', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/admin/showPatients.html'));
 });
 
-router.get('/registerDoctor', (req, res) => {
-    res.sendFile(path.join(__dirname, '../views/admin/registerDoctor.html'));
+
+router.get('/registerUser', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/admin/registerUser.html'));
 });
+
 
 router.get('/invokeTransaction', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin/invokeTransaction.html'));

@@ -19,7 +19,8 @@
         }
 
         .sidebar {
-            width: 200px; /* Adjust the width as needed */
+            width: 200px;
+            /* Adjust the width as needed */
             background-color: #343a40;
             padding: 20px;
             min-height: 100vh;
@@ -29,7 +30,7 @@
         .navbar {
             background-color: #007bff;
             color: white;
-            padding: 15px;
+            padding: 10px;
         }
 
         .content {
@@ -62,7 +63,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar" id="leftSection">
+            <div class="col-md sidebar" id="leftSection">
                 <h3>Admin Options</h3>
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -71,21 +72,23 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showDoctors()">View Doctors</a>
                     </li>
-                    <div id="patientsResult" class="result-container"></div>
-                    <div id="doctorsResult" class="result-container"></div>
+                    <br>
+                    <div id="sideContent">
+                        <!-- Content will be dynamically replaced based on admin's actions -->
+                        <h2>Welcome, Admin!</h2>
+                        <p>view patients and doctors</p>
+                    </div>
+
                 </ul>
             </div>
-   
+
             <!-- Content -->
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <!-- Navbar -->
                 <nav class="navbar">
                     <ul class="nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="showRegisterPatient()">Register Patient</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick="showRegisterDoctor()">Register Doctor</a>
+                            <a class="nav-link" href="#" onclick="showRegisterUser()">Register User</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showInvokeTransaction()">Invoke Transaction</a>
@@ -105,7 +108,7 @@
                         </a>
                         </li>
                         <li class="nav-item"></li>
-                        <a href="http://localhost:5000/patient" target="_blank">
+                        <a href="http://localhost:5000/doctor" target="_blank">
                             <button>go to doctor dashboard</button>
                         </a>
                         </li>

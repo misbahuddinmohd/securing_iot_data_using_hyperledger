@@ -22,7 +22,13 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
         } */
-
+        #role {
+            /* width: 100%; */
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
         #token-display {
             margin-top: 20px;
             word-wrap: break-word; /* This will break long words to the next line */
@@ -51,8 +57,17 @@
 </head>
 <body>
     <div id="registration-form">
-        <h2>Patient Registration</h2>
+        <h2>User Registration</h2>
         <form id="user-registration-form">
+            <label for="role">Role:</label>
+            <select id="role" required>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+            </select>
+            <br><br>
+            <label for="userID">UserID:</label>
+            <input type="text" id="userID" required>
+            <br><br>
             <label for="username">Username:</label>
             <input type="text" id="username" required>
             <br><br>

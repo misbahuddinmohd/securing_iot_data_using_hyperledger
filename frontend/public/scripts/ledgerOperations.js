@@ -2,6 +2,8 @@
 
 function registerUser() {
     const username = document.getElementById('username').value;
+    const roleinp = document.getElementById('role').value;
+    const userID = document.getElementById('userID').value;
 
     // Mock API call
     fetch('http://localhost:4000/users', {
@@ -12,11 +14,16 @@ function registerUser() {
         body: JSON.stringify({
             username: username,
             orgName: 'Org1',
+            role: roleinp,
         }),
     })
     .then(response => response.json())
     .then(data => {
         displayToken(data.message, data.token);
+        if (roleinp == 'patient') {
+            // Save patient data to CouchDB
+            savePatientData(userID, username, data.token);
+        }
     })
     .catch(error => console.error('Error:', error));
 }
@@ -37,6 +44,30 @@ function copyToken() {
     document.execCommand('copy');
     document.body.removeChild(textarea);
     alert('Token copied to clipboard!');
+}
+
+function savePatientData(patientIdDis, patientNameDis, patientTokenDis) {
+    const data = {
+        _id: patientIdDis,
+        patient_name: patientNameDis,
+        patient_token: patientTokenDis,
+    };
+  
+    // Make a request to store patient data in CouchDB
+    fetch('http://localhost:5984/patients', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(savedData => {
+            console.log('Patient data stored successfully:', savedData);
+        })
+        .catch(error => {
+            console.error('Error storing patient data:', error);
+        });
 }
 
 //=============================================================================================================================================

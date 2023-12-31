@@ -17,13 +17,14 @@
         }
 
         #leftSection {
-            width: 600px;
+            width: 550px;
             background-color: #343a40;
             padding: 20px;
             height: 100%;
             color: white;
             display: flex;
             flex-direction: column;
+            
         }
 
         #intro {
@@ -39,6 +40,7 @@
             margin-bottom: 20px;
             text-align: center;
             color: #000000;
+            overflow: auto;
         }
 
         /* label {
@@ -47,9 +49,24 @@
             font-weight: bold;
         } */
 
-        #patientId,
-        #patientName,
-        #authToken {
+        #patient-details {
+            background-color: #333;
+            color: white;
+            padding: 7px;
+            width: 100%;
+            margin-bottom: 7px;
+            justify-content: space-between;
+            align-items: center;
+            /* display: flex; */
+            font-weight: bold;
+            word-wrap: break-word; /* This will break long words to the next line */
+            overflow-wrap: break-word; /* This is for non-webkit browsers */
+        }
+
+
+        #patientIdSim,
+        #patientNameSim,
+        #patientTokenSim {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -83,7 +100,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
-            
+
         }
 
         .sensor img {
@@ -107,7 +124,7 @@
         .navbar {
             background-color: #007bff;
             color: white;
-            padding: 15px;
+            padding: 10px;
         }
 
         .nav-link {
@@ -128,11 +145,11 @@
         </div>
         <div id="simulator-container">
             <label for="patientId">Patient ID:</label>
-            <input type="text" id="patientId" placeholder="Enter patient ID">
+            <input type="text" id="patientIdSim" placeholder="Enter patient ID">
             <label for="patientName">Patient Name:</label>
-            <input type="text" id="patientName" placeholder="Enter patient name">
+            <input type="text" id="patientNameSim" placeholder="Enter patient name">
             <label for="authToken">Authorization Token:</label>
-            <input type="text" id="authToken" placeholder="Enter authorization token">
+            <input type="text" id="patientTokenSim" placeholder="Enter authorization token">
             <br>
             <button onclick="startSimulation()">Start Simulator</button>
             <button onclick="stopSimulation()">Stop Simulator</button>
@@ -156,7 +173,18 @@
         </div>
     </div>
 
+
+
     <div id="rightSection">
+
+        <div id="patient-details">
+            <input type="text" id="patientID" placeholder="Enter Patient ID">
+            <button onclick="getPatientDetails()">Get Details</button>
+            <p id="patientIdDisplay"></p>
+            <p id="patientNameDisplay"></p>
+            <p id="patientTokenDisplay"></p>
+        </div>
+
         <!-- Navbar -->
         <nav class="navbar">
             <ul class="nav">
@@ -191,6 +219,7 @@
     <!-- Include the external script file -->
     <script src="/scripts/scriptPatient.js"></script>
     <script src="/scripts/ledgerOperations.js"></script>
+    <script src="/scripts/scriptIotsimulator.js"></script>
 </body>
 
 </html>

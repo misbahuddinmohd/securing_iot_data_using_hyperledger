@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        } */
+        #patientDataTable {
+            background-color: #f2f2f2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: rgb(0, 0, 0);
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* button {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        } */
+    </style>
+</head>
+
+<body>
+
+    <h4>Patient Data</h4>
+
+    <button onclick="retrieveAllPatients()">Get All Patients</button>
+    <div id="patientDataTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Patient Token</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="patientTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- <script>
+    async function retrieveAllPatients() {
+        const couchdbUrl = 'http://localhost:5984';
+        const databaseName = 'patients';
+        const retrieveAllUrl = `${couchdbUrl}/${databaseName}/_all_docs`;
+
+        try {
+            const response = await fetch(retrieveAllUrl);
+            const result = await response.json();
+
+            if (response.ok) {
+                const patientTableBody = document.getElementById('patientTableBody');
+                patientTableBody.innerHTML = '';
+
+                result.rows.forEach(async (row) => {
+                    const patientId = row.id;
+                    const patientData = await retrievePatientData(patientId);
+
+                    const rowElement = document.createElement('tr');
+                    rowElement.innerHTML = `
+                        <td>${patientData._id}</td>
+                        <td>${patientData.patient_name}</td>
+                        <td>${patientData.patient_token.slice(0, 5)}...${patientData.patient_token.slice(-5)}</td>
+                        <td><button onclick="copyPatientToken('${patientData.patient_token}')">Copy Token</button></td>
+                    `;
+
+                    patientTableBody.appendChild(rowElement);
+                });
+            } else {
+                console.error(`Error retrieving all patients: ${result}`);
+            }
+        } catch (error) {
+            console.error(`Error retrieving all patients: ${error.message}`);
+        }
+    }
+
+    async function retrievePatientData(patientId) {
+        const couchdbUrl = 'http://localhost:5984';
+        const databaseName = 'patients';
+        const retrieveUrl = `${couchdbUrl}/${databaseName}/${patientId}`;
+
+        try {
+            const response = await fetch(retrieveUrl);
+            const result = await response.json();
+
+            if (response.ok) {
+                return result;
+            } else {
+                console.error(`Error retrieving patient data for ID ${patientId}: ${result}`);
+                return {};
+            }
+        } catch (error) {
+            console.error(`Error retrieving patient data for ID ${patientId}: ${error.message}`);
+            return {};
+        }
+    }
+
+    function copyToken(token) {
+        navigator.clipboard.writeText(token)
+            .then(() => {
+                alert('Token copied to clipboard!');
+            })
+            .catch((error) => {
+                console.error('Error copying token to clipboard:', error);
+            });
+    }
+</script> -->
+
+</body>
+
+</html>

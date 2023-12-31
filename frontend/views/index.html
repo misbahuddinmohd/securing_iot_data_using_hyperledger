@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Securing IoT Data using Hyperledger Fabric</title>
+    <!-- Keep only necessary styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -17,14 +18,8 @@
             max-width: 600px;
         }
 
-        form {
-            margin-top: 20px;
-        }
-
-        .form-container {
-            display: none;
-            margin-top: 20px;
-            /* Add margin-top to create space above the forms */
+        .btn-group label {
+            font-size: 20px; /* Adjust the font size as needed */
         }
 
         button {
@@ -37,85 +32,37 @@
     <div class="container text-center">
         <h1 class="mb-4">Securing IoT Data using Hyperledger Fabric</h1>
 
-        <form id="roleForm">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-outline-dark">
-                    <input type="radio" name="role" value="admin"> Admin
-                </label>
-                <label class="btn btn-outline-dark">
-                    <input type="radio" name="role" value="doctor"> Doctor
-                </label>
-                <label class="btn btn-outline-dark">
-                    <input type="radio" name="role" value="patient"> Patient
-                </label>
-            </div>
+        <h3 class="mb-4">who are you..?</h3>
 
-            <div class="form-container" id="adminForm" style="display: none;">
-                <div class="form-group">
-                    <label for="adminName">Name:</label>
-                    <input type="text" class="form-control" id="adminName" required>
-                </div>
-                <div class="form-group">
-                    <label for="adminToken">Private Key Token:</label>
-                    <input type="text" class="form-control" id="adminToken" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="submitForm('admin')">Submit</button>
-            </div>
-
-            <div class="form-container" id="doctorForm" style="display: none;">
-                <div class="form-group">
-                    <label for="doctorName">Name:</label>
-                    <input type="text" class="form-control" id="doctorName" required>
-                </div>
-                <div class="form-group">
-                    <label for="doctorToken">Private Key Token:</label>
-                    <input type="text" class="form-control" id="doctorToken" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="submitForm('doctor')">Submit</button>
-            </div>
-
-            <div class="form-container" id="patientForm" style="display: none;">
-                <div class="form-group">
-                    <label for="patientId">Patient ID:</label>
-                    <input type="text" class="form-control" id="patientId" required>
-                </div>
-                <div class="form-group">
-                    <label for="patientName">Name:</label>
-                    <input type="text" class="form-control" id="patientName" required>
-                </div>
-                <div class="form-group">
-                    <label for="patientToken">Private Key Token:</label>
-                    <input type="text" class="form-control" id="patientToken" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="submitForm('patient')">Submit</button>
-            </div>
-        </form>
+        <!-- Role Buttons -->
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-dark" onclick="gotoPage('admin')">
+                <input type="radio" name="role" value="admin"> Admin
+            </label>
+            <label class="btn btn-outline-dark" onclick="gotoPage('doctor')">
+                <input type="radio" name="role" value="doctor"> Doctor
+            </label>
+            <label class="btn btn-outline-dark" onclick="gotoPage('patient')">
+                <input type="radio" name="role" value="patient"> Patient
+            </label>
+        </div>
     </div>
 
+    <!-- Keep only necessary scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $('input[name="role"]').change(function () {
-                var selectedRole = $('input[name="role"]:checked').val();
-
-                $('#adminForm').toggle(selectedRole === 'admin');
-                $('#doctorForm').toggle(selectedRole === 'doctor');
-                $('#patientForm').toggle(selectedRole === 'patient');
-            });
-
-            function submitForm(role) {
-                if (role === 'admin') {
-                    window.location.href = 'admin-page.html';
-                } else if (role === 'doctor') {
-                    window.location.href = 'doctor-page.html';
-                } else if (role === 'patient') {
-                    window.location.href = 'patient-page.html';
-                }
+        function gotoPage(role) {
+            if (role === 'admin') {
+                window.open('http://localhost:5000/admin', '_blank');
+            } else if (role === 'doctor') {
+                window.open('http://localhost:5000/doctor', '_blank');
+            } else if (role === 'patient') {
+                window.open('http://localhost:5000/patient', '_blank');
             }
-        });
+        }
     </script>
 </body>
 
