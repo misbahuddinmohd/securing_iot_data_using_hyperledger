@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: rgb(0, 0, 0);
+        }
+
+        th,
+        td {
+            border: 1px solid #020202;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #pending-approvals-table {
+            background-color: #dddddd;
+        }
+
+        hr {
+            color: #007bff; /* Change color to blue (you can use any valid color value) */
+            background-color: #007bff; /* Change background color to blue */
+            height: 2px; /* Change the thickness (height) of the <hr> */
+            /* border: none; Remove the default border */
+            /* margin: 10px 0; Add some margin for spacing */
+        }
+    </style>
+</head>
+
+<body>
+    <h4>Pending Patient Approvals</h4>
+    <button onclick="retrieveAllPatientsAlerts()">Get All Patients</button>
+    <table id="pending-approvals-table">
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Parameter</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="pending-approvals"> </tbody>
+    </table>
+
+    <!-- <script>
+        // // Function to update ledger after doctor approval
+        // async function attendTransaction(patientId, parameter, value) {
+        //     // Add logic to update the ledger with doctor's approval
+        //     // Call your updateTransaction function with the required data
+        // }
+
+        // // Sample function to add pending approvals to the doctor's page
+        // function addPendingApproval(patientId, patientName, parameter, value) {
+        //     const tableBody = document.getElementById('pending-approvals').getElementsByTagName('tbody')[0];
+        //     const newRow = tableBody.insertRow();
+        //     newRow.innerHTML = `
+        //         <td>${patientId}</td>
+        //         <td>${patientName}</td>
+        //         <td>${parameter}</td>
+        //         <td>${value}</td>
+        //         <td><button onclick="attendTransaction('${patientId}', '${parameter}', '${value}')">Attend</button></td>
+        //     `;
+        // }
+
+        // // Sample usage: Call this function when a patient's health parameter exceeds the threshold
+        // addPendingApproval('123', 'John Doe', 'Temperature', '99');
+    </script> -->
+</body>
+
+</html>

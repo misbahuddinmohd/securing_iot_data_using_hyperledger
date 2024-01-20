@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data Viewer</title>
+</head>
+<body>
+    <h1>Sensor Data Viewer</h1>
+    <button onclick="startViewingData()">Start Viewing Data</button>
+    <div id="sensorData"></div>
+    <script>
+        function startViewingData() {
+            setInterval(updateSensorData, 10000);
+        }
+
+        function updateSensorData() {
+            fetch('/get_sensor_data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('sensorData').innerText = `Heart Rate: ${data.heartRate}, Temperature: ${data.temperature} C`;
+                });
+        }
+    </script>
+</body>
+</html>

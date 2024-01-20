@@ -87,13 +87,29 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 }
 
 func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
+	val, ok, err := cid.GetAttributeValue(APIstub, "role")
+	if err != nil {
+		// There was an error trying to retrieve the attribute
+		shim.Error("Error while retriving attributes")
 	}
-
-	carAsBytes, _ := APIstub.GetState(args[0])
-	return shim.Success(carAsBytes)
+	if !ok {
+		// The client identity does not possess the attribute
+		shim.Error("Client identity doesnot posses the attribute")
+	}
+	// Do something with the value of 'val'
+	if val == "admin" || val == "patient" || val == "doctor" {
+		if len(args) != 1 {
+			return shim.Error("Incorrect number of arguments. Expecting 1")
+		}
+	
+		carAsBytes, _ := APIstub.GetState(args[0])
+		return shim.Success(carAsBytes)
+		
+	} else {
+		fmt.Println("Attribute role: " + val)
+		return shim.Error("Only user with role as admin, patient and doctor have access to this method!")
+	}
+	
 }
 
 func (s *SmartContract) readPrivateCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -324,25 +340,41 @@ func (s *SmartContract) updatePrivateData(APIstub shim.ChaincodeStubInterface, a
 }
 
 func (s *SmartContract) createCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
-	}
-
-	var car = Car{Temperature: args[1], Heartrate: args[2], Bp: args[3], Spo2: args[4], Patient: args[5]}
-
-	carAsBytes, _ := json.Marshal(car)
-	APIstub.PutState(args[0], carAsBytes)
-
-	indexName := "owner~key"
-	colorNameIndexKey, err := APIstub.CreateCompositeKey(indexName, []string{car.Patient, args[0]})
+	val, ok, err := cid.GetAttributeValue(APIstub, "role")
 	if err != nil {
-		return shim.Error(err.Error())
+		// There was an error trying to retrieve the attribute
+		shim.Error("Error while retriving attributes")
 	}
-	value := []byte{0x00}
-	APIstub.PutState(colorNameIndexKey, value)
-
-	return shim.Success(carAsBytes)
+	if !ok {
+		// The client identity does not possess the attribute
+		shim.Error("Client identity doesnot posses the attribute")
+	}
+	// Do something with the value of 'val'
+	if val == "admin" || val == "patient" {
+		if len(args) != 6 {
+			return shim.Error("Incorrect number of arguments. Expecting 6")
+		}
+	
+		var car = Car{Temperature: args[1], Heartrate: args[2], Bp: args[3], Spo2: args[4], Patient: args[5]}
+	
+		carAsBytes, _ := json.Marshal(car)
+		APIstub.PutState(args[0], carAsBytes)
+	
+		indexName := "owner~key"
+		colorNameIndexKey, err := APIstub.CreateCompositeKey(indexName, []string{car.Patient, args[0]})
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		value := []byte{0x00}
+		APIstub.PutState(colorNameIndexKey, value)
+	
+		return shim.Success(carAsBytes)
+		
+	} else {
+		fmt.Println("Attribute role: " + val)
+		return shim.Error("Only user with role as admin and patient have access to this method!")
+	}
+	
 }
 
 func (S *SmartContract) queryCarsByOwner(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
@@ -467,104 +499,136 @@ func (s *SmartContract) restictedMethod(APIstub shim.ChaincodeStubInterface, arg
 		shim.Error("Client identity doesnot posses the attribute")
 	}
 	// Do something with the value of 'val'
-	if val != "approver" {
-		fmt.Println("Attribute role: " + val)
-		return shim.Error("Only user with role as APPROVER have access this method!")
-	} else {
+	if val == "admin" || val == "patient" {
 		if len(args) != 1 {
 			return shim.Error("Incorrect number of arguments. Expecting 1")
 		}
 
 		carAsBytes, _ := APIstub.GetState(args[0])
 		return shim.Success(carAsBytes)
+
+	} else {
+		fmt.Println("Attribute role: " + val)
+		return shim.Error("Only user with role as admin have access this method!")
 	}
 
 }
 
 func (s *SmartContract) changeCarOwner(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-
-	if len(args) != 6 {
-		return shim.Error("Incorrect number of arguments. Expecting 6")
+	val, ok, err := cid.GetAttributeValue(APIstub, "role")
+	if err != nil {
+		// There was an error trying to retrieve the attribute
+		shim.Error("Error while retriving attributes")
 	}
-
-	carAsBytes, _ := APIstub.GetState(args[0])
-	car := Car{}
-
-	json.Unmarshal(carAsBytes, &car)
+	if !ok {
+		// The client identity does not possess the attribute
+		shim.Error("Client identity doesnot posses the attribute")
+	}
+	// Do something with the value of 'val'
+	if val == "admin" || val == "patient" || val == "doctor"{
+		if len(args) != 6 {
+			return shim.Error("Incorrect number of arguments. Expecting 6")
+		}
 	
-	car.Temperature = args[1]
-	car.Heartrate = args[2]
-	car.Bp = args[3]
-	car.Spo2 = args[4]
-	car.Patient = args[5]
-
-	carAsBytes, _ = json.Marshal(car)
-	APIstub.PutState(args[0], carAsBytes)
-
-	return shim.Success(carAsBytes)
+		carAsBytes, _ := APIstub.GetState(args[0])
+		car := Car{}
+	
+		json.Unmarshal(carAsBytes, &car)
+		
+		car.Temperature = args[1]
+		car.Heartrate = args[2]
+		car.Bp = args[3]
+		car.Spo2 = args[4]
+		car.Patient = args[5]
+	
+		carAsBytes, _ = json.Marshal(car)
+		APIstub.PutState(args[0], carAsBytes)
+	
+		return shim.Success(carAsBytes)
+		
+	} else {
+		fmt.Println("Attribute role: " + val)
+		return shim.Error("Only user with role as admin and patient have access to this method!")
+	}
 }
 
-func (t *SmartContract) getHistoryForAsset(stub shim.ChaincodeStubInterface, args []string) sc.Response {
+func (t *SmartContract) getHistoryForAsset(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) < 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
-	}
-
-	carName := args[0]
-
-	resultsIterator, err := stub.GetHistoryForKey(carName)
+	val, ok, err := cid.GetAttributeValue(APIstub, "role")
 	if err != nil {
-		return shim.Error(err.Error())
+		// There was an error trying to retrieve the attribute
+		shim.Error("Error while retriving attributes")
 	}
-	defer resultsIterator.Close()
-
-	// buffer is a JSON array containing historic values for the marble
-	var buffer bytes.Buffer
-	buffer.WriteString("[")
-
-	bArrayMemberAlreadyWritten := false
-	for resultsIterator.HasNext() {
-		response, err := resultsIterator.Next()
+	if !ok {
+		// The client identity does not possess the attribute
+		shim.Error("Client identity doesnot posses the attribute")
+	}
+	// Do something with the value of 'val'
+	if val == "admin" || val == "patient" || val == "doctor" {
+		if len(args) < 1 {
+			return shim.Error("Incorrect number of arguments. Expecting 1")
+		}
+	
+		carName := args[0]
+	
+		resultsIterator, err := APIstub.GetHistoryForKey(carName)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
-		// Add a comma before array members, suppress it for the first array member
-		if bArrayMemberAlreadyWritten == true {
-			buffer.WriteString(",")
+		defer resultsIterator.Close()
+	
+		// buffer is a JSON array containing historic values for the marble
+		var buffer bytes.Buffer
+		buffer.WriteString("[")
+	
+		bArrayMemberAlreadyWritten := false
+		for resultsIterator.HasNext() {
+			response, err := resultsIterator.Next()
+			if err != nil {
+				return shim.Error(err.Error())
+			}
+			// Add a comma before array members, suppress it for the first array member
+			if bArrayMemberAlreadyWritten == true {
+				buffer.WriteString(",")
+			}
+			buffer.WriteString("{\"TxId\":")
+			buffer.WriteString("\"")
+			buffer.WriteString(response.TxId)
+			buffer.WriteString("\"")
+	
+			buffer.WriteString(", \"Value\":")
+			// if it was a delete operation on given key, then we need to set the
+			//corresponding value null. Else, we will write the response.Value
+			//as-is (as the Value itself a JSON marble)
+			if response.IsDelete {
+				buffer.WriteString("null")
+			} else {
+				buffer.WriteString(string(response.Value))
+			}
+	
+			buffer.WriteString(", \"Timestamp\":")
+			buffer.WriteString("\"")
+			buffer.WriteString(time.Unix(response.Timestamp.Seconds, int64(response.Timestamp.Nanos)).String())
+			buffer.WriteString("\"")
+	
+			buffer.WriteString(", \"IsDelete\":")
+			buffer.WriteString("\"")
+			buffer.WriteString(strconv.FormatBool(response.IsDelete))
+			buffer.WriteString("\"")
+	
+			buffer.WriteString("}")
+			bArrayMemberAlreadyWritten = true
 		}
-		buffer.WriteString("{\"TxId\":")
-		buffer.WriteString("\"")
-		buffer.WriteString(response.TxId)
-		buffer.WriteString("\"")
-
-		buffer.WriteString(", \"Value\":")
-		// if it was a delete operation on given key, then we need to set the
-		//corresponding value null. Else, we will write the response.Value
-		//as-is (as the Value itself a JSON marble)
-		if response.IsDelete {
-			buffer.WriteString("null")
-		} else {
-			buffer.WriteString(string(response.Value))
-		}
-
-		buffer.WriteString(", \"Timestamp\":")
-		buffer.WriteString("\"")
-		buffer.WriteString(time.Unix(response.Timestamp.Seconds, int64(response.Timestamp.Nanos)).String())
-		buffer.WriteString("\"")
-
-		buffer.WriteString(", \"IsDelete\":")
-		buffer.WriteString("\"")
-		buffer.WriteString(strconv.FormatBool(response.IsDelete))
-		buffer.WriteString("\"")
-
-		buffer.WriteString("}")
-		bArrayMemberAlreadyWritten = true
+		buffer.WriteString("]")
+	
+		fmt.Printf("- getHistoryForAsset returning:\n%s\n", buffer.String())
+	
+		return shim.Success(buffer.Bytes())
+		
+	} else {
+		fmt.Println("Attribute role: " + val)
+		return shim.Error("Only user with role as admin, patient and doctor have access to this method!")
 	}
-	buffer.WriteString("]")
-
-	fmt.Printf("- getHistoryForAsset returning:\n%s\n", buffer.String())
-
-	return shim.Success(buffer.Bytes())
 }
 
 func (s *SmartContract) createPrivateCarImplicitForOrg1(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {

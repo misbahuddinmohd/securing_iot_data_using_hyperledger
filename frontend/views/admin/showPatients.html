@@ -81,7 +81,7 @@
                         <td>${patientData._id}</td>
                         <td>${patientData.patient_name}</td>
                         <td>${patientData.patient_token.slice(0, 5)}...${patientData.patient_token.slice(-5)}</td>
-                        <td><button onclick="copyPatientToken('${patientData.patient_token}')">Copy Token</button></td>
+                        <td><button onclick="copyPDToken('${patientData.patient_token}')">Copy Token</button></td>
                     `;
 
                     patientTableBody.appendChild(rowElement);

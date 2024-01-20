@@ -20,7 +20,7 @@ async function retrieveAllPatients() {
                     <td>${patientData._id}</td>
                     <td>${patientData.patient_name}</td>
                     <td>${patientData.patient_token.slice(0, 5)}...${patientData.patient_token.slice(-5)}</td>
-                    <td><button onclick="copyPatientToken('${patientData.patient_token}')">Copy Token</button></td>
+                    <td><button onclick="copyPDToken('${patientData.patient_token}')">Copy Token</button></td>
                 `;
 
                 patientTableBody.appendChild(rowElement);
@@ -54,7 +54,9 @@ async function retrievePatientData(patientId) {
     }
 }
 
-function copyPatientToken(token) {
+//###################################################################################################
+
+function copyPDToken(token) {
     navigator.clipboard.writeText(token)
         .then(() => {
             alert('Token copied to clipboard!');
@@ -64,9 +66,64 @@ function copyPatientToken(token) {
         });
 }
 
+//###################################################################################################
 
 
+async function retrieveAllDoctors() {
+    const couchdbUrl = 'http://localhost:5984';
+    const databaseName = 'doctors';
+    const retrieveAllUrl = `${couchdbUrl}/${databaseName}/_all_docs`;
 
+    try {
+        const response = await fetch(retrieveAllUrl);
+        const result = await response.json();
+
+        if (response.ok) {
+            const doctorTableBody = document.getElementById('doctorTableBody');
+            doctorTableBody.innerHTML = '';
+
+            result.rows.forEach(async (row) => {
+                const doctorId = row.id;
+                const doctorData = await retrieveDoctorData(doctorId);
+
+                const rowElement = document.createElement('tr');
+                rowElement.innerHTML = `
+                    <td>${doctorData._id}</td>
+                    <td>${doctorData.doctor_name}</td>
+                    <td>${doctorData.doctor_token.slice(0, 5)}...${doctorData.doctor_token.slice(-5)}</td>
+                    <td><button onclick="copyPDToken('${doctorData.doctor_token}')">Copy Token</button></td>
+                `;
+
+                doctorTableBody.appendChild(rowElement);
+            });
+        } else {
+            console.error(`Error retrieving all doctors: ${result}`);
+        }
+    } catch (error) {
+        console.error(`Error retrieving all doctors: ${error.message}`);
+    }
+}
+
+async function retrieveDoctorData(doctorId) {
+    const couchdbUrl = 'http://localhost:5984';
+    const databaseName = 'doctors';
+    const retrieveUrl = `${couchdbUrl}/${databaseName}/${doctorId}`;
+
+    try {
+        const response = await fetch(retrieveUrl);
+        const result = await response.json();
+
+        if (response.ok) {
+            return result;
+        } else {
+            console.error(`Error retrieving doctor data for ID ${doctorId}: ${result}`);
+            return {};
+        }
+    } catch (error) {
+        console.error(`Error retrieving doctor data for ID ${doctorId}: ${error.message}`);
+        return {};
+    }
+}
 
 
 
@@ -149,8 +206,9 @@ function showPatients() {
 
 function showDoctors() {
     // Logic to fetch and display doctors
-    var doctorsResult = '<h3>View Doctors</h3><p>This section will display a list of doctors.</p>';
-    document.getElementById('doctorsResult').innerHTML = doctorsResult;
+    // var doctorsResult = '<h3>View Doctors</h3><p>This section will display a list of doctors.</p>';
+    // document.getElementById('doctorsResult').innerHTML = doctorsResult;
+    loadSideContent('/admin/showDoctors');
 }
 
 function showRegisterUser() {

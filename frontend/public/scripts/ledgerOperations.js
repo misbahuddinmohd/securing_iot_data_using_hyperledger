@@ -24,6 +24,10 @@ function registerUser() {
             // Save patient data to CouchDB
             savePatientData(userID, username, data.token);
         }
+        else if(roleinp == 'doctor')
+        {
+            saveDoctorData(userID, username, data.token);
+        }
     })
     .catch(error => console.error('Error:', error));
 }
@@ -69,6 +73,33 @@ function savePatientData(patientIdDis, patientNameDis, patientTokenDis) {
             console.error('Error storing patient data:', error);
         });
 }
+
+function saveDoctorData(doctorIdDis, doctorNameDis, doctorTokenDis) {
+    const data = {
+        _id: doctorIdDis,
+        doctor_name: doctorNameDis,
+        doctor_token: doctorTokenDis,
+    };
+  
+    // Make a request to store doctor data in CouchDB
+    fetch('http://localhost:5984/doctors', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(savedData => {
+            console.log('Doctor data stored successfully:', savedData);
+        })
+        .catch(error => {
+            console.error('Error storing doctor data:', error);
+        });
+}
+
+
+
 
 //=============================================================================================================================================
 
@@ -179,6 +210,88 @@ async function updateTransaction() {
     const patientName = document.getElementById('patient-name').value;
     const authToken = document.getElementById('authorization-token').value;
 
+    // Check if the health parameters exceed the threshold
+    if (parseFloat(temperature) > 98 || parseFloat(spo2) < 90) {
+        // Notify the doctor about the pending approval
+        const alertData = {
+            pId: patientId,
+            pName: patientName,
+            params: [temperature, heartRate, bloodPressure, spo2]
+        };
+        addPendingApproval(alertData);
+        //updateTransactionAfterAttend();
+    } else {
+
+        const data = {
+            fcn: 'changeCarOwner',
+            peers: ["peer0.org1.example.com", "peer0.org2.example.com"],
+            chaincodeName: 'fabcar',
+            channelName: 'mychannel',
+            args: [patientId, temperature, heartRate, bloodPressure, spo2, patientName]
+        };
+    
+        try {
+            const response = await fetch('http://localhost:4000/channels/mychannel/chaincodes/fabcar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify(data),
+            });
+    
+            const result = await response.json();
+    
+            if (result.result && result.result.tx_id) {
+                document.getElementById('tx-id').innerText = `Transaction ID: ${result.result.tx_id}`;
+                document.getElementById('error').innerText = `Error: ${result.error ? result.error : 'None'}`;
+                document.getElementById('error-data').innerText = `Error Data: ${result.errorData ? result.errorData : 'None'}`;
+                document.getElementById('update-result').style.display = 'block';
+            } else {
+                console.error('Error during update transaction:', result.errorData);
+                document.getElementById('update-result').innerHTML = '<p>Error during update transaction</p>';
+            }
+        } catch (error) {
+            console.error('Error during update transaction:', error);
+            document.getElementById('update-result').innerHTML = '<p>Error during update transaction</p>';
+        }
+    }  
+}
+
+function addPendingApproval(alertData)
+{
+    const data = {
+        _id: alertData.pId,
+        patient_name: alertData.pName,
+        params: alertData.params,
+    };
+  
+    // Make a request to store patient data in CouchDB
+    fetch('http://localhost:5984/patientsalerts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(savedData => {
+            console.log('Patient alert data stored successfully:', savedData);
+        })
+        .catch(error => {
+            console.error('Error storing patient alert data:', error);
+        });
+}
+
+async function updateTransactionAfterAttend() {
+    const patientId = document.getElementById('patient-id').value;
+    const temperature = document.getElementById('temperature').value;
+    const heartRate = document.getElementById('heart-rate').value;
+    const bloodPressure = document.getElementById('blood-pressure').value;
+    const spo2 = document.getElementById('spo2').value;
+    const patientName = document.getElementById('patient-name').value;
+    const authToken = document.getElementById('authorization-token').value;
+
     const data = {
         fcn: 'changeCarOwner',
         peers: ["peer0.org1.example.com", "peer0.org2.example.com"],
@@ -213,6 +326,8 @@ async function updateTransaction() {
         document.getElementById('update-result').innerHTML = '<p>Error during update transaction</p>';
     }
 }
+
+
 
 // function copyTxId() {
 //     const txIdElement = document.getElementById('tx-id');

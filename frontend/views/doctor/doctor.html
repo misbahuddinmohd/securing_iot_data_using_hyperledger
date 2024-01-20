@@ -19,12 +19,26 @@
         }
 
         .sidebar {
-            width: 200px; /* Adjust the width as needed */
             background-color: #343a40;
             padding: 20px;
             min-height: 100vh;
             color: white;
+            margin: 5px;
         }
+
+        .col-md-3.sidebar {
+            max-width: 430px; /* Set the desired maximum width in pixels */
+            width: 100%;
+        }
+
+        .col-md-4.sidebar {
+            max-width: 530px; /* Set the desired maximum width in pixels */
+            width: 100%;
+        }
+        .col-md {
+            overflow: auto;
+        }
+
 
         #doctor-details {
             background-color: #333;
@@ -36,8 +50,10 @@
             align-items: center;
             /* display: flex; */
             font-weight: bold;
-            word-wrap: break-word; /* This will break long words to the next line */
-            overflow-wrap: break-word; /* This is for non-webkit browsers */
+            word-wrap: break-word;
+            /* This will break long words to the next line */
+            overflow-wrap: break-word;
+            /* This is for non-webkit browsers */
         }
 
         .navbar {
@@ -47,7 +63,7 @@
         }
 
         .content {
-            padding: 20px;
+            padding: 10px;
             overflow: auto;
         }
 
@@ -69,6 +85,7 @@
             font-size: 14px;
             margin-right: 10px;
         }
+
         .dot {
             width: 17px;
             height: 17px;
@@ -95,18 +112,39 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar" id="leftSection">
+            <div class="col-md-3 sidebar" id="leftSection">
                 <h3>Doctor Options</h3>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick="showPatients()">View Patients</a>
                     </li>
-                    <div id="patientsResult" class="result-container"></div>
+                    <br>
+                    <div id="sideContent">
+                        <!-- Content will be dynamically replaced based on admin's actions -->
+                        <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p>
+                    </div>
                 </ul>
             </div>
-   
+
+            <div class="col-md-4 sidebar" id="leftSection2">
+                <h3>Patient Alerts</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPatientsAlerts()">View Patients Alerts</a>
+                    </li>
+                    <br>
+                    <div id="sideContent2">
+                        <!-- Content will be dynamically replaced based on admin's actions -->
+                        <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p>
+                    </div>
+                </ul>
+            </div>
+
+
             <!-- Content -->
-            <div class="col-md-9">
+            <div class="col-md">
 
                 <div id="doctor-details">
                     <input type="text" id="doctorID" placeholder="Enter Doctor ID">
@@ -150,7 +188,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Update the script path based on your new structure -->
-    <script src="/scripts/scriptAdmin.js"></script>
+    <script src="/scripts/scriptDoctor.js"></script>
     <script src="/scripts/ledgerOperations.js"></script>
 </body>
 

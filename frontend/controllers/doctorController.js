@@ -6,6 +6,14 @@ router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/doctor/doctor.html'));
 });
 
+router.get('/showPatients', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/doctor/showPatients.html'));
+});
+
+router.get('/showPatientsAlerts', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/doctor/showPatientsAlerts.html'));
+});
+
 router.get('/queryTransaction', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/doctor/queryTransaction.html'));
 });

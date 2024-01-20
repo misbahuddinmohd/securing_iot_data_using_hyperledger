@@ -107,6 +107,9 @@ function getErrorMessage(field) {
 app.post('/users', async function (req, res) {
 	var username = req.body.username;
 	var orgName = req.body.orgName;
+	// --------
+	var role = req.body.role;
+	// --------
 	logger.debug('End point : /users');
 	logger.debug('User name : ' + username);
 	logger.debug('Org name  : ' + orgName);
@@ -118,12 +121,18 @@ app.post('/users', async function (req, res) {
 		res.json(getErrorMessage('\'orgName\''));
 		return;
 	}
+	// -----------------
+	if (!role) {
+		res.json(getErrorMessage('\'role\''));
+		return;
+	}
+	// ----------------
 	var token = jwt.sign({
 		exp: Math.floor(Date.now() / 1000) + parseInt(hfc.getConfigSetting('jwt_expiretime')),
 		username: username,
 		orgName: orgName
 	}, app.get('secret'));
-	let response = await helper.getRegisteredUser(username, orgName, true);
+	let response = await helper.getRegisteredUser(username, orgName, role, true);
 	logger.debug('-- returned from registering the username %s for organization %s', username, orgName);
 	if (response && typeof response !== 'string') {
 		logger.debug('Successfully registered the username %s for organization %s', username, orgName);

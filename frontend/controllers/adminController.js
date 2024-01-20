@@ -23,6 +23,10 @@ router.get('/showPatients', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin/showPatients.html'));
 });
 
+router.get('/showDoctors', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/admin/showDoctors.html'));
+});
+
 
 router.get('/registerUser', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/admin/registerUser.html'));
