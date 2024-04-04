@@ -45,6 +45,9 @@
             <label class="btn btn-outline-dark" onclick="gotoPage('patient')">
                 <input type="radio" name="role" value="patient"> Patient
             </label>
+            <label class="btn btn-outline-dark" onclick="gotoPage('org2')">
+                <input type="radio" name="role" value="patient"> Org2
+            </label>
         </div>
     </div>
 
@@ -61,6 +64,8 @@
                 window.open('http://localhost:5000/doctor', '_blank');
             } else if (role === 'patient') {
                 window.open('http://localhost:5000/patient', '_blank');
+            } else if (role === 'org2') {
+                window.open('http://localhost:5000/org2', '_blank');
             }
         }
     </script>

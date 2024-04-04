@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Access Request</title>
+    <style>
+        /* body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        } */
+        #patientDataTable {
+            background-color: #dddddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            color: rgb(0, 0, 0);
+        }
+
+        th,
+        td {
+            border: 1px solid #000000;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* button {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        } */
+    </style>
+</head>
+
+<body>
+    <button onclick="getRequests()">Get Request</button>
+    <div id="requestsTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Doctor-B ID</th>
+                    <th>Patient ID</th>
+                    <th>Prime value</th>
+                    <th>Generator value</th>
+                    <th>Remark</th>
+                    <!-- <th>Action1</th>
+                    <th>Action2</th> -->
+                </tr>
+            </thead>
+            <tbody id="requestsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- <script src="requestDataAccess.js"></script> -->
+</body>
+
+</html>

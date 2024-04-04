@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor A Interface</title>
+</head>
+<body>
+  <h2>Doctor A Authentication</h2>
+  <label for="prime">Prime Number (p):</label>
+  <input type="text" id="prime">
+  <label for="generator">Generator (g):</label>
+  <input type="text" id="generator">
+  <label for="secret">Secret (x):</label>
+  <input type="text" id="secret">
+  <button onclick="sendAuthRequest()">Send Authentication Request</button>
+
+  <script>
+    function sendAuthRequest() {
+  const p = document.getElementById('prime').value;
+  const g = document.getElementById('generator').value;
+  const x = document.getElementById('secret').value;
+
+  // Send p, g, x to Doctor B (backend)
+  fetch('/auth_request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ p, g, x })
+  });
+}
+
+  </script>
+</body>
+</html>

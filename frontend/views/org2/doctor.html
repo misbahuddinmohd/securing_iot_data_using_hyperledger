@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORG2 Doctor Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container-fluid {
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .sidebar {
+            background-color: #343a40;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+            margin: 5px;
+        }
+
+        .col-md-3.sidebar {
+            max-width: 430px; /* Set the desired maximum width in pixels */
+            width: 100%;
+        }
+
+        .col-md-4.sidebar {
+            max-width: 530px; /* Set the desired maximum width in pixels */
+            width: 100%;
+        }
+        .col-md {
+            overflow: auto;
+        }
+
+
+        #doctor-details {
+            background-color: #333;
+            color: white;
+            padding: 7px;
+            width: 100%;
+            margin-bottom: 7px;
+            justify-content: space-between;
+            align-items: center;
+            /* display: flex; */
+            font-weight: bold;
+            word-wrap: break-word;
+            /* This will break long words to the next line */
+            overflow-wrap: break-word;
+            /* This is for non-webkit browsers */
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+        }
+
+        .content {
+            padding: 10px;
+            overflow: auto;
+        }
+
+        .nav-link {
+            color: white !important;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .normal {
+            background-color: green;
+        }
+
+        .moderate {
+            background-color: yellow;
+        }
+
+        .critical {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <!-- <div class="col-md-3 sidebar" id="leftSection">
+                <h3>Doctor Options</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPatients()">View Patients</a>
+                    </li>
+                    <br>
+                    <div id="sideContent">
+                        <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p>
+                    </div>
+                </ul>
+            </div>
+
+            <div class="col-md-4 sidebar" id="leftSection2">
+                <h3>Patient Alerts</h3>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPatientsAlerts()">View Patients Alerts</a>
+                    </li>
+                    <br>
+                    <div id="sideContent2">
+                        <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p>
+                    </div>
+                </ul>
+            </div> -->
+
+
+            <!-- Content -->
+            <div class="col-md">
+                <h3>A Different Organization</h3>
+
+                <div id="doctor-details">
+                    <input type="text" id="doctorID" placeholder="Enter Doctor ID">
+                    <button onclick="getDoctorDetails()">Get Details</button>
+                    <p id="doctorIdDisplay"></p>
+                    <p id="doctorNameDisplay"></p>
+                    <p id="doctorTokenDisplay"></p>
+                </div>
+
+                <!-- Navbar -->
+                <nav class="navbar">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showRegisterUser()">Register doctor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="requestDataAccess()">Request Data Access</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="requestStatus()">Requests Status</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showAssetHistory()">Get Asset History</a>
+                        </li>
+                        <!-- <li class="nav-item"></li>
+                        <a href="http://localhost:5000/patient" target="_blank">
+                            <button>go to patient dashboard</button>
+                        </a>
+                        </li> -->
+
+                        <!-- Add more items as needed -->
+                    </ul>
+                </nav>
+
+                <!-- Main Content -->
+                <div class="content" id="mainContent">
+                    <!-- Content will be dynamically replaced based on admin's actions -->
+                    <h2>Welcome, Doctor!</h2>
+                    <p>Select an option from the sidebar or navbar.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Update the script path based on your new structure -->
+    <script src="/scripts/scriptDoctorb.js"></script>
+    <!-- <script src="/scripts/ledgerOperations.js"></script> -->
+    <!-- <script src="doctor.js"></script> -->
+
+</body>
+
+</html>

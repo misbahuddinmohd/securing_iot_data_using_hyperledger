@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Viewer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #resultContainer {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockchain Viewer</h1>
+    
+    <label for="blockNumber">Enter Block Number:</label>
+    <input type="text" id="blockNumber" placeholder="Block Number">
+    
+    <label for="token">Enter Token:</label>
+    <input type="text" id="token" placeholder="Bearer Token">
+    
+    <button onclick="viewBlockchain()">View Blockchain</button>
+
+    <div id="resultContainer">
+        <!-- Display the API result here -->
+    </div>
+
+    <script>
+        function viewBlockchain() {
+            // Get user input
+            var blockNumber = document.getElementById("blockNumber").value;
+            var token = document.getElementById("token").value;
+
+            // Construct the API URL
+            var apiUrl = `http://localhost:4000/channels/mychannel/blocks/${blockNumber}?peer=peer0.org1.example.com`;
+
+            // Make a GET request to the API using Fetch API and include Bearer Token
+            fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the result in the resultContainer
+                document.getElementById("resultContainer").innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                // Display an error message in the resultContainer
+                document.getElementById("resultContainer").innerHTML = 'Error fetching data. Please check the input and try again.';
+            });
+        }
+    </script>
+</body>
+</html>

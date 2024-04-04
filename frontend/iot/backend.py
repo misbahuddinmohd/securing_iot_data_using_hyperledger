@@ -30,8 +30,8 @@ def get_sensor_data():
 
     if data:
         # Calculate average values
-        heart_rate_avg = sum(d['heartRate'] for d in data) / len(data)
-        temperature_avg = sum(d['temperature'] for d in data) / len(data)
+        heart_rate_avg = round(sum(d['heartRate'] for d in data) / len(data), 2)
+        temperature_avg = round(sum(d['temperature'] for d in data) / len(data), 2)
 
         # Update latest_sensor_data
         latest_sensor_data['heartRate'] = heart_rate_avg

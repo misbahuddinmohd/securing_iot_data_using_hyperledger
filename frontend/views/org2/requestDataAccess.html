@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Data for Doc B</title>
+    <!-- <style>
+
+    </style> -->
+</head>
+
+<body>
+    <div id="authForm">
+        <h2>Request Data</h2>
+        <form id="authForm">
+            <label for="doctorId">Enter Doctor ID:</label>
+            <input type="text" id="doctorId" required>
+            <br><br>
+            <label for="docbAuthToken">Authentication Token:</label>
+            <input type="text" id="docbAuthToken" required>
+            <br><br>
+            <label for="patientId">Enter Patient ID:</label>
+            <input type="text" id="patientId" required>
+            <br><br>
+
+            <h5>Variables for the ZKP algorithm (to be agreed by both parties)</h5>
+            <label for="prime">Enter a prime:</label>
+            <input type="number" id="prime" required>
+            <br>
+            <label for="generator">Enter a generator value:</label>
+            <input type="number" id="generator" required>
+            <br><br>
+            <label for="remark">Remark If any:</label>
+            <input type="text" id="remark">
+            <br><br>
+            <button type="button" onclick="saveAccessRequest()">Request Data</button>
+            <br><br>
+            <p id="msg"></p>
+        </form>
+    </div>
+
+    <!-- <script src="requestDataAccess.js"></script> -->
+</body>
+
+</html>

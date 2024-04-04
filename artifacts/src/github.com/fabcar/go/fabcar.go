@@ -87,28 +87,34 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 }
 
 func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	val, ok, err := cid.GetAttributeValue(APIstub, "role")
-	if err != nil {
-		// There was an error trying to retrieve the attribute
-		shim.Error("Error while retriving attributes")
-	}
-	if !ok {
-		// The client identity does not possess the attribute
-		shim.Error("Client identity doesnot posses the attribute")
-	}
-	// Do something with the value of 'val'
-	if val == "admin" || val == "patient" || val == "doctor" {
-		if len(args) != 1 {
-			return shim.Error("Incorrect number of arguments. Expecting 1")
-		}
+	// val, ok, err := cid.GetAttributeValue(APIstub, "role")
+	// if err != nil {
+	// 	// There was an error trying to retrieve the attribute
+	// 	shim.Error("Error while retriving attributes")
+	// }
+	// if !ok {
+	// 	// The client identity does not possess the attribute
+	// 	shim.Error("Client identity doesnot posses the attribute")
+	// }
+	// // Do something with the value of 'val'
+	// if val == "admin" || val == "patient" || val == "doctor" {
+	// 	if len(args) != 1 {
+	// 		return shim.Error("Incorrect number of arguments. Expecting 1")
+	// 	}
 	
-		carAsBytes, _ := APIstub.GetState(args[0])
-		return shim.Success(carAsBytes)
+	// 	carAsBytes, _ := APIstub.GetState(args[0])
+	// 	return shim.Success(carAsBytes)
 		
-	} else {
-		fmt.Println("Attribute role: " + val)
-		return shim.Error("Only user with role as admin, patient and doctor have access to this method!")
+	// } else {
+	// 	fmt.Println("Attribute role: " + val)
+	// 	return shim.Error("Only user with role as admin, patient and doctor have access to this method!")
+	// }
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
+
+	carAsBytes, _ := APIstub.GetState(args[0])
+	return shim.Success(carAsBytes)
 	
 }
 
@@ -340,40 +346,58 @@ func (s *SmartContract) updatePrivateData(APIstub shim.ChaincodeStubInterface, a
 }
 
 func (s *SmartContract) createCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-	val, ok, err := cid.GetAttributeValue(APIstub, "role")
-	if err != nil {
-		// There was an error trying to retrieve the attribute
-		shim.Error("Error while retriving attributes")
-	}
-	if !ok {
-		// The client identity does not possess the attribute
-		shim.Error("Client identity doesnot posses the attribute")
-	}
-	// Do something with the value of 'val'
-	if val == "admin" || val == "patient" {
-		if len(args) != 6 {
-			return shim.Error("Incorrect number of arguments. Expecting 6")
-		}
+	// val, ok, err := cid.GetAttributeValue(APIstub, "role")
+	// if err != nil {
+	// 	// There was an error trying to retrieve the attribute
+	// 	shim.Error("Error while retriving attributes")
+	// }
+	// if !ok {
+	// 	// The client identity does not possess the attribute
+	// 	shim.Error("Client identity doesnot posses the attribute")
+	// }
+	// // Do something with the value of 'val'
+	// if val == "admin" || val == "patient" {
+	// 	if len(args) != 6 {
+	// 		return shim.Error("Incorrect number of arguments. Expecting 6")
+	// 	}
 	
-		var car = Car{Temperature: args[1], Heartrate: args[2], Bp: args[3], Spo2: args[4], Patient: args[5]}
+	// 	var car = Car{Temperature: args[1], Heartrate: args[2], Bp: args[3], Spo2: args[4], Patient: args[5]}
 	
-		carAsBytes, _ := json.Marshal(car)
-		APIstub.PutState(args[0], carAsBytes)
+	// 	carAsBytes, _ := json.Marshal(car)
+	// 	APIstub.PutState(args[0], carAsBytes)
 	
-		indexName := "owner~key"
-		colorNameIndexKey, err := APIstub.CreateCompositeKey(indexName, []string{car.Patient, args[0]})
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-		value := []byte{0x00}
-		APIstub.PutState(colorNameIndexKey, value)
+	// 	indexName := "owner~key"
+	// 	colorNameIndexKey, err := APIstub.CreateCompositeKey(indexName, []string{car.Patient, args[0]})
+	// 	if err != nil {
+	// 		return shim.Error(err.Error())
+	// 	}
+	// 	value := []byte{0x00}
+	// 	APIstub.PutState(colorNameIndexKey, value)
 	
-		return shim.Success(carAsBytes)
+	// 	return shim.Success(carAsBytes)
 		
-	} else {
-		fmt.Println("Attribute role: " + val)
-		return shim.Error("Only user with role as admin and patient have access to this method!")
+	// } else {
+	// 	fmt.Println("Attribute role: " + val)
+	// 	return shim.Error("Only user with role as admin and patient have access to this method!")
+	// }
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
+
+	var car = Car{Temperature: args[1], Heartrate: args[2], Bp: args[3], Spo2: args[4], Patient: args[5]}
+
+	carAsBytes, _ := json.Marshal(car)
+	APIstub.PutState(args[0], carAsBytes)
+
+	indexName := "owner~key"
+	colorNameIndexKey, err := APIstub.CreateCompositeKey(indexName, []string{car.Patient, args[0]})
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	value := []byte{0x00}
+	APIstub.PutState(colorNameIndexKey, value)
+
+	return shim.Success(carAsBytes)
 	
 }
 

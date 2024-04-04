@@ -22,7 +22,7 @@ function fetchData() {
       updateSensorData(JSON.parse(xhr.responseText));
     }
   };
-  xhr.open("GET", "http://localhost:8000/sensorData", true);
+  xhr.open("GET", "http://localhost:2000/sensorData", true);
   xhr.send();
 }
 

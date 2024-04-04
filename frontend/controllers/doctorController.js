@@ -22,5 +22,8 @@ router.get('/assetHistory', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/doctor/assetHistory.html'));
 });
 
+router.get('/verifyAccessRequests', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/doctor/verifyAccessRequests.html'));
+});
 
 module.exports = router;

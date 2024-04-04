@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor B Interface</title>
+</head>
+<body>
+  <h2>Doctor B Authentication</h2>
+  <label for="prime">Prime Number (p):</label>
+  <input type="text" id="prime">
+  <label for="generator">Generator (g):</label>
+  <input type="text" id="generator">
+  <label for="v">Public Key (v):</label>
+  <input type="text" id="v">
+  <label for="random">Random Number (y):</label>
+  <input type="text" id="random">
+  <button onclick="verifyAuth()">Authenticate</button>
+
+  <div id="result"></div>
+
+  <script>
+    function verifyAuth() {
+  const p = document.getElementById('prime').value;
+  const g = document.getElementById('generator').value;
+  const v = document.getElementById('v').value;
+  const y = document.getElementById('random').value;
+
+  // Send p, g, v, y to Doctor A (backend) for verification
+  fetch('/verify_auth', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ p, g, v, y })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.authenticated) {
+      document.getElementById('result').textContent = "Authentication Successful";
+      // Proceed with data sharing
+    } else {
+      document.getElementById('result').textContent = "Authentication Failed";
+    }
+  });
+}
+
+  </script>
+</body>
+</html>

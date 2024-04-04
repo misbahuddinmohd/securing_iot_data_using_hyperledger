@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .card {
+      width: 45%;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Patient Dashboard</h1>
+  <div class="container">
+    <div class="card">
+      <h2>Average Values</h2>
+      <ul>
+        <li>Average Temperature: <span id="avgTemperature"></span></li>
+        <li>Average Heart Rate: <span id="avgHeartRate"></span></li>
+        <li>Average Blood Pressure: <span id="avgBP"></span></li>
+        <li>Average SpO2: <span id="avgSpO2"></span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Temperature Graph</h2>
+      <canvas id="temperatureChart"></canvas>
+    </div>
+    <div class="card">
+      <h2>Heart Rate Graph</h2>
+      <canvas id="heartRateChart"></canvas>
+    </div>
+    <div class="card">
+      <h2>Blood Pressure Graph</h2>
+      <canvas id="bpChart"></canvas>
+    </div>
+    <div class="card">
+      <h2>SpO2 Graph</h2>
+      <canvas id="spo2Chart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Sample patient data
+    const patientData = [
+      {
+        "Value": {
+          "temperature": "37.2",
+          "heartrate": "75",
+          "bp": "125/82",
+          "spo2": "96",
+          "patient": "pat1"
+        },
+        "Timestamp": "2024-04-04 18:48:16.139 +0000 UTC"
+      },
+      {
+        "Value": {
+          "temperature": "36.8",
+          "heartrate": "68",
+          "bp": "118/76",
+          "spo2": "99",
+          "patient": "pat1"
+        },
+        "Timestamp": "2024-04-04 18:48:05.67 +0000 UTC",
+      },
+      {
+        "Value": {
+          "temperature": "37",
+          "heartrate": "72",
+          "bp": "130/85",
+          "spo2": "97",
+          "patient": "pat1"
+        },
+        "Timestamp": "2024-04-04 18:47:55.684 +0000 UTC",
+      },
+      {
+        "Value": {
+          "temperature": "36.5",
+          "heartrate": "70",
+          "bp": "120/80",
+          "spo2": "98",
+          "patient": "pat1"
+        },
+        "Timestamp": "2024-04-04 18:47:45.75 +0000 UTC",
+      },
+      {
+        "Value": {
+          "temperature": "98",
+          "heartrate": "175",
+          "bp": "185/85",
+          "spo2": "98",
+          "patient": "test2"
+        },
+        "Timestamp": "2024-04-04 14:09:08.201757863 +0000 UTC",
+      }
+    ];
+
+    // Function to calculate average value of an array
+    const calculateAverage = arr => arr.reduce((acc, val) => acc + parseFloat(val), 0) / arr.length;
+
+    // Function to parse patient data and update dashboard
+    const updateDashboard = data => {
+      const temperatures = [];
+      const heartRates = [];
+      const bps = [];
+      const spo2s = [];
+
+      data.forEach(entry => {
+        const value = entry.Value;
+        temperatures.push(parseFloat(value.temperature));
+        heartRates.push(parseFloat(value.heartrate));
+        const bpValues = value.bp.split('/');
+        bps.push({
+          systolic: parseFloat(bpValues[0]),
+          diastolic: parseFloat(bpValues[1])
+        });
+        spo2s.push(parseFloat(value.spo2));
+      });
+
+      // Update average values
+      document.getElementById('avgTemperature').textContent = calculateAverage(temperatures).toFixed(1);
+      document.getElementById('avgHeartRate').textContent = calculateAverage(heartRates).toFixed(1);
+      const avgBP = {
+        systolic: calculateAverage(bps.map(bp => bp.systolic)).toFixed(1),
+        diastolic: calculateAverage(bps.map(bp => bp.diastolic)).toFixed(1)
+      };
+      document.getElementById('avgBP').textContent = `${avgBP.systolic}/${avgBP.diastolic}`;
+      document.getElementById('avgSpO2').textContent = calculateAverage(spo2s).toFixed(1);
+
+      // Temperature Chart
+      new Chart(document.getElementById('temperatureChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: data.map(entry => new Date(entry.Timestamp).toLocaleTimeString()),
+          datasets: [{
+            label: 'Temperature',
+            data: temperatures,
+            borderColor: 'red',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // Heart Rate Chart
+      new Chart(document.getElementById('heartRateChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: data.map(entry => new Date(entry.Timestamp).toLocaleTimeString()),
+          datasets: [{
+            label: 'Heart Rate',
+            data: heartRates,
+            borderColor: 'blue',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // Blood Pressure Chart
+      new Chart(document.getElementById('bpChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: data.map(entry => new Date(entry.Timestamp).toLocaleTimeString()),
+          datasets: [{
+            label: 'Systolic',
+            data: bps.map(bp => bp.systolic),
+            borderColor: 'green',
+            borderWidth: 1
+          }, {
+            label: 'Diastolic',
+            data: bps.map(bp => bp.diastolic),
+            borderColor: 'orange',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // SpO2 Chart
+      new Chart(document.getElementById('spo2Chart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: data.map(entry => new Date(entry.Timestamp).toLocaleTimeString()),
+          datasets: [{
+            label: 'SpO2',
+            data: spo2s,
+            borderColor: 'purple',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+    };
+
+    // Update dashboard with sample data
+    updateDashboard(patientData);
+  </script>
+</body>
+</html>

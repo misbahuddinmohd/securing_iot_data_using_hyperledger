@@ -1,7 +1,7 @@
 
 //================================ for IoT simulator ====================================================
 // Constants
-const SIMULATION_INTERVAL = 5000;
+const SIMULATION_INTERVAL = 10000; // 10sec
 const FABCAR_API_URL = 'http://localhost:4000/channels/mychannel/chaincodes/fabcar';
 let args=[];
 

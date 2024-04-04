@@ -362,6 +362,7 @@ async function getAssetHistory() {
         });
 
         const historyData = await response.json();
+        console.log("The Asset History is:", JSON.stringify(historyData, null, 2));
 
         if (historyData && historyData.length > 0) {
             const tableBody = document.getElementById('history-table-body');
