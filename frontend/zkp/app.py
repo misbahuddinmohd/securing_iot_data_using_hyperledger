@@ -21,7 +21,7 @@ def fiat_shamir(prime, generator, docbToken):
     G = int(generator)
 
 
-    # Doc-B hashes her password and computes her secret number s
+    # Doc-B hashes his password and computes his secret number s
     password = 'S3cr3t!'.encode('utf-8')
     digest = hashlib.md5(password).hexdigest()
     s = int(digest, 16) % p
@@ -50,10 +50,14 @@ def fiat_shamir(prime, generator, docbToken):
     #####################  FROM PROVER TO VERIFIER  #####################
     #####################################################################
 
-    # Doc-B computes z and sends to Doc-A
+    # Doc-B computes z and sends to Doc-A (****** chnage  ********)
     z = (t - c * s)
+    # z = 100
 
     print(f'Doc-B -> Doc-A: z = {z}')
+
+    ######################  VERIFICATION PROCESS   ######################
+    #####################################################################
 
     # Doc-A computes y using c, x, and z
     if z < 0:

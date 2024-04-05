@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Health Report</title>
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 5px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 45%;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 12px rgba(29, 250, 0, 0.1);
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+
+
+        /* for average values card */
+
+        .card.average-values {
+            /* width: 60%; */
+            /* margin: 20px auto;  */
+            background-color: #dffdcd;
+            border: 1px solid #ddd;
+        }
+
+        .card.average-values h2 {
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .card.average-values ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .card.average-values ul li {
+            margin-bottom: 10px;
+        }
+
+        .card.average-values ul li span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Patient Health Report</h1>
+    <div class="container">
+        <div class="card average-values">
+            <h2>Average Values</h2>
+            <ul>
+                <li>Average Temperature: <span id="avgTemperature"></span></li>
+                <li>Average Heart Rate: <span id="avgHeartRate"></span></li>
+                <li>Average Blood Pressure: <span id="avgBP"></span></li>
+                <li>Average SpO2: <span id="avgSpO2"></span></li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Combined Graph</h2>
+            <canvas id="combinedChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Temperature Graph</h2>
+            <canvas id="temperatureChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Heart Rate Graph</h2>
+            <canvas id="heartRateChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>Blood Pressure Graph</h2>
+            <canvas id="bpChart"></canvas>
+        </div>
+        <div class="card">
+            <h2>SpO2 Graph</h2>
+            <canvas id="spo2Chart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="scripts.js"></script> -->
+    <!-- <script src="/scripts/scriptDoctor.js"></script> -->
+    <script>
+        // Parse the historyData from the query parameter
+        // Retrieve historyData from localStorage
+        const serializedHistoryData = localStorage.getItem('patientReportData');
+        const historyData = JSON.parse(serializedHistoryData);
+
+        // Call the updateReport function with the retrieved historyData
+        updateReport(historyData);
+
+        // Optional: Clear historyData from localStorage if needed
+        localStorage.removeItem('patientReportData');
+
+
+        function updateReport(historyData) {
+            const temperatures = [];
+            const heartRates = [];
+            const bps = [];
+            const spo2s = [];
+            const timestamps = [];
+
+            // Function to calculate average value of an array
+            const calculateAverage = arr => arr.reduce((acc, val) => acc + parseFloat(val), 0) / arr.length;
+
+            historyData.forEach(entry => {
+                const value = entry.Value;
+                temperatures.push(parseFloat(value.temperature));
+                heartRates.push(parseFloat(value.heartrate));
+                const bpValues = value.bp.split('/');
+                bps.push({
+                    systolic: parseFloat(bpValues[0]),
+                    diastolic: parseFloat(bpValues[1])
+                });
+                spo2s.push(parseFloat(value.spo2));
+                timestamps.push(new Date(entry.Timestamp).toLocaleTimeString());
+            });
+
+            // Update average values
+            document.getElementById('avgTemperature').textContent = calculateAverage(temperatures).toFixed(1);
+            document.getElementById('avgHeartRate').textContent = calculateAverage(heartRates).toFixed(1);
+            const avgBP = {
+                systolic: calculateAverage(bps.map(bp => bp.systolic)).toFixed(1),
+                diastolic: calculateAverage(bps.map(bp => bp.diastolic)).toFixed(1)
+            };
+            document.getElementById('avgBP').textContent = `${avgBP.systolic}/${avgBP.diastolic}`;
+            document.getElementById('avgSpO2').textContent = calculateAverage(spo2s).toFixed(1);
+
+            // Temperature Chart
+            new Chart(document.getElementById('temperatureChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Temperature',
+                        data: temperatures,
+                        borderColor: 'red',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // Heart Rate Chart
+            new Chart(document.getElementById('heartRateChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Heart Rate',
+                        data: heartRates,
+                        borderColor: 'blue',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // Blood Pressure Chart
+            new Chart(document.getElementById('bpChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Systolic',
+                        data: bps.map(bp => bp.systolic),
+                        borderColor: 'green',
+                        borderWidth: 1
+                    }, {
+                        label: 'Diastolic',
+                        data: bps.map(bp => bp.diastolic),
+                        borderColor: 'orange',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // SpO2 Chart
+            new Chart(document.getElementById('spo2Chart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'SpO2',
+                        data: spo2s,
+                        borderColor: 'purple',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            // Combined Chart
+            new Chart(document.getElementById('combinedChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [
+                        {
+                            label: 'Temperature',
+                            data: temperatures,
+                            borderColor: 'red',
+                            borderWidth: 1,
+                            yAxisID: 'temp-y-axis'
+                        },
+                        {
+                            label: 'Heart Rate',
+                            data: heartRates,
+                            borderColor: 'blue',
+                            borderWidth: 1,
+                            yAxisID: 'hr-y-axis'
+                        },
+                        {
+                            label: 'Systolic',
+                            data: bps.map(bp => bp.systolic),
+                            borderColor: 'green',
+                            borderWidth: 1,
+                            yAxisID: 'bp-y-axis'
+                        },
+                        {
+                            label: 'Diastolic',
+                            data: bps.map(bp => bp.diastolic),
+                            borderColor: 'orange',
+                            borderWidth: 1,
+                            yAxisID: 'bp-y-axis'
+                        },
+                        {
+                            label: 'SpO2',
+                            data: spo2s,
+                            borderColor: 'purple',
+                            borderWidth: 1,
+                            yAxisID: 'spo2-y-axis'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [
+                            {
+                                id: 'temp-y-axis',
+                                type: 'linear',
+                                position: 'left',
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Temperature (°C)'
+                                }
+                            },
+                            {
+                                id: 'hr-y-axis',
+                                type: 'linear',
+                                position: 'right',
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Heart Rate (bpm)'
+                                }
+                            },
+                            {
+                                id: 'bp-y-axis',
+                                type: 'linear',
+                                position: 'right',
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Blood Pressure (mmHg)'
+                                }
+                            },
+                            {
+                                id: 'spo2-y-axis',
+                                type: 'linear',
+                                position: 'left',
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'SpO2 (%)'
+                                }
+                            }
+                        ]
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

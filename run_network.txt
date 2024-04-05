@@ -17,3 +17,11 @@ sudo docker-compose down
 #copy from begin certificate to end certificate and paste i into a sample file file.pem
 
 openssl x509 -in file.pem --text
+
+
+----------------------------------------------
+sudo chmod 666 /var/run/docker.sock
+
+docker system df
+-----------------------------------------------
+df -h //for checking root dir contents

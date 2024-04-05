@@ -26,4 +26,13 @@ router.get('/verifyAccessRequests', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/doctor/verifyAccessRequests.html'));
 });
 
+router.get('/showPatientReport', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/doctor/showPatientReport.html'));
+});
+
+router.get('/patientReport', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/doctor/patientReport.html'));
+});
+
+
 module.exports = router;

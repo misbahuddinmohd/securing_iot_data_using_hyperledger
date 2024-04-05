@@ -34,5 +34,13 @@ router.get('/requestStatus', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/org2/requestStatus.html'));
 });
 
+router.get('/showPatientReport', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/org2/showPatientReport.html'));
+});
+
+router.get('/patientReport', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/org2/patientReport.html'));
+});
+
 
 module.exports = router;

@@ -24,6 +24,9 @@ function verifyAccessRequests() {
     loadContent('/doctor/verifyAccessRequests');
 }
 
+function showPatientReport() {
+    loadContent('/doctor/showPatientReport');
+}
 
 function loadSideContent(htmlFile) {
     fetch(htmlFile)
@@ -68,7 +71,7 @@ function copyPDToken(token) {
 
 //#########################################################################################################################################
 
-//########################################################################################################################################
+//#########################################################################################################################################
 let authToken;
 
 function getDoctorDetails() {
@@ -328,6 +331,7 @@ function deletePendingApproval(docId) {
 
 
 async function getRequests() {
+    const doctoraID = document.getElementById('doctorID').value;
     const couchdbUrl = 'http://localhost:5984';
     const databaseName = 'dataaccessrequests';
     const retrieveAllUrl = `${couchdbUrl}/${databaseName}/_all_docs`;
@@ -345,11 +349,12 @@ async function getRequests() {
                 const requestsData = await retrieveDocbData(doctorId);
                 
                 // Check if is_verified is "false" before creating the row element
-                if (requestsData.is_verified == "false") {
+                if (requestsData.is_verified == "false" && requestsData.doctora_id == doctoraID) {
                     const rowElement = document.createElement('tr');
                     rowElement.innerHTML = `
                         <td>${requestsData._id}</td>
                         <td>${requestsData.patient_id}</td>
+                        <td>${requestsData.doctora_id}</td>
                         <td>${requestsData.prime_val}</td>
                         <td>${requestsData.generator_val}</td>
                         <td>${requestsData.remark}</td>
@@ -434,6 +439,7 @@ function discardRequest(docbId){
                 _id: docbId,
                 _rev: doc._rev, // Include the _rev value here
                 patient_id: doc.patient_id,
+                doctora_id: doc.doctoraId,
                 docb_auth_token: doc.docb_auth_token,
                 prime_val: doc.prime_val,
                 generator_val: doc.generator_val,
@@ -478,11 +484,12 @@ function updateStatus(docbId) {
                 _id: docbId,
                 _rev: doc._rev, // Include the _rev value here
                 patient_id: doc.patient_id,
+                doctora_id: doc.doctoraId,
                 docb_auth_token: doc.docb_auth_token,
                 prime_val: doc.prime_val,
                 generator_val: doc.generator_val,
                 remark: doc.remark,
-                is_verified: "false"
+                is_verified: "true"
                 // Include other fields of the document if needed
             })
         });
@@ -499,8 +506,45 @@ function updateStatus(docbId) {
 
 
 //#########################################################################################################################################
+//#########################################################################################################################################
+
+async function getPatientReport() {
+    const patientID = document.getElementById('patient-id').value;
+    const authToken = document.getElementById('authorization-token').value;
+
+    const apiUrl = `http://localhost:4000/channels/mychannel/chaincodes/fabcar?args=["${patientID}"]&peer=peer0.org1.example.com&fcn=getHistoryForAsset`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+        });
+
+        const historyData = await response.json();
+        console.log("The Asset History is:", JSON.stringify(historyData, null, 2));
+
+        // Store historyData in localStorage
+        localStorage.setItem('patientReportData', JSON.stringify(historyData));
+
+        // URL of the webpage you want to open
+        const reportUrl = "http://localhost:5000/doctor/patientReport";
+        // Open the URL in a new tab
+        window.open(reportUrl, "_blank");
+
+
+        // Update dashboard with fetched data
+        // updateReport(historyData);
+    } catch (error) {
+        console.error('Error during asset history retrieval:', error);
+        // Handle error, maybe show a message to the user
+    }
+}
 
 //#########################################################################################################################################
+//#########################################################################################################################################
+
 
 
 //#########################################################################################################################################

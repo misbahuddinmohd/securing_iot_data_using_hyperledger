@@ -60,6 +60,7 @@
             background-color: #007bff;
             color: white;
             padding: 10px;
+            font-weight: bold;
         }
 
         .content {
@@ -110,6 +111,16 @@
 
 <body>
     <div class="container-fluid">
+
+
+        <div id="doctor-details">
+            <input type="text" id="doctorID" placeholder="Enter Doctor ID">
+            <button onclick="getDoctorDetails()">Get Details</button>
+            <p id="doctorIdDisplay"></p>
+            <p id="doctorNameDisplay"></p>
+            <p id="doctorTokenDisplay"></p>
+        </div>
+
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 sidebar" id="leftSection">
@@ -121,8 +132,8 @@
                     <br>
                     <div id="sideContent">
                         <!-- Content will be dynamically replaced based on admin's actions -->
-                        <h2>Welcome, Doctor!</h2>
-                        <p>view patients </p>
+                        <!-- <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p> -->
                     </div>
                 </ul>
             </div>
@@ -136,8 +147,8 @@
                     <br>
                     <div id="sideContent2">
                         <!-- Content will be dynamically replaced based on admin's actions -->
-                        <h2>Welcome, Doctor!</h2>
-                        <p>view patients </p>
+                        <!-- <h2>Welcome, Doctor!</h2>
+                        <p>view patients </p> -->
                     </div>
                 </ul>
             </div>
@@ -146,13 +157,7 @@
             <!-- Content -->
             <div class="col-md">
 
-                <div id="doctor-details">
-                    <input type="text" id="doctorID" placeholder="Enter Doctor ID">
-                    <button onclick="getDoctorDetails()">Get Details</button>
-                    <p id="doctorIdDisplay"></p>
-                    <p id="doctorNameDisplay"></p>
-                    <p id="doctorTokenDisplay"></p>
-                </div>
+                
 
                 <!-- Navbar -->
                 <nav class="navbar">
@@ -162,6 +167,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showAssetHistory()">Get Asset History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showPatientReport()">Get Patient Report</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="verifyAccessRequests()">Verify Access Requests</a>

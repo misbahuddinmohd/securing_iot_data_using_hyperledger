@@ -84,6 +84,53 @@ app.use(function (req, res, next) {
 	});
 });
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const axios = require('axios');
+
+async function createDatabaseIfNotExists(dbName) {
+    try {
+        await axios.head(`http://localhost:5984/${dbName}`);
+        console.log(`Database '${dbName}' already exists`);
+    } catch (error) {
+        if (error.response && error.response.status === 404) {
+            try {
+                await axios.put(`http://localhost:5984/${dbName}`);
+                console.log(`Database '${dbName}' created successfully`);
+            } catch (error) {
+                console.error(`Error creating database '${dbName}':`, error.message);
+            }
+        } else {
+            console.error(`Error checking database '${dbName}':`, error.message);
+        }
+    }
+}
+
+async function createDatabases() {
+    const databases = ['patients', 'doctors', 'doctorsb', 'patientsalerts', 'dataaccessrequests'];
+
+    for (const dbName of databases) {
+        try {
+            await createDatabaseIfNotExists(dbName);
+        } catch (error) {
+            console.error(`Error creating database '${dbName}':`, error.message);
+            // If you want to stop creating databases altogether if one fails, you could throw the error here:
+            // throw error;
+        }
+    }
+}
+
+// Create databases before starting the server
+createDatabases();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// START SERVER /////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

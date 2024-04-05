@@ -15,7 +15,7 @@
 // function showQueryTransaction() {
 //     loadContent('/doctor/queryTransaction');
 // }
-
+let doctorGlobalData;
 function showAssetHistory() {
     loadContent('/org2/assetHistory');
 }
@@ -30,6 +30,10 @@ function showRegisterUser() {
 
 function requestStatus() {
     loadContent('/org2/requestStatus');
+}
+
+function showPatientReport() {
+    loadContent('/org2/showPatientReport');
 }
 
 function loadSideContent(htmlFile) {
@@ -168,6 +172,7 @@ function retrieveDoctorData(doctorId) {
             return response.json();
         })
         .then(doctorData => {
+            doctorGlobalData = doctorData;
             console.log('doctor data retrieved successfully:', doctorData);
             // Display doctor details and make auth token global
             authToken = doctorData.doctor_token;
@@ -193,10 +198,11 @@ function displayDoctorDetails(doctorData) {
 
 
 async function getAssetHistory() {
-    const doctorId = document.getElementById('doctor-id').value;
+    const doctorId = document.getElementById('doctorID').value;
     const patientId = document.getElementById('patient-id').value;
-    const authToken = document.getElementById('authorization-token').value;
-
+    // const authToken = document.getElementById('authorization-token').value;
+    const authToken = doctorGlobalData.doctor_token;
+    
     const isVerified = await getRequestStatus(patientId, doctorId);
 
     if (isVerified) {
@@ -282,14 +288,18 @@ async function getRequestStatus(patientId, doctorId) {
 
 function saveAccessRequest() {
     const patientId = document.getElementById('patientId').value;
-    const doctorId = document.getElementById('doctorId').value;
-    const docbAuthToken = document.getElementById('docbAuthToken').value;
+    const doctorId = document.getElementById('doctorID').value;
+    const doctoraId = document.getElementById('doctoraId').value;
+    // const docbAuthToken = document.getElementById('docbAuthToken').value;
+    const docbAuthToken = doctorGlobalData.doctor_token;
+
     const prime = document.getElementById('prime').value;
     const generator = document.getElementById('generator').value;
     const remark = document.getElementById('remark').value;
     const isVerified = "false";
     const data = {
         _id: doctorId,
+        doctora_id: doctoraId,
         patient_id: patientId,
         docb_auth_token: docbAuthToken,
         prime_val: prime,
@@ -341,16 +351,19 @@ async function getRequests() {
                 const requestsData = await retrieveDocbData(doctorId);
                 
                 // Check if is_verified is "false" before creating the row element
+                if (requestsData.is_verified == "false" && requestsData._id == document.getElementById('doctorID').value) {
                     const rowElement = document.createElement('tr');
                     rowElement.innerHTML = `
                         <td>${requestsData._id}</td>
                         <td>${requestsData.patient_id}</td>
+                        <td>${requestsData.doctora_id}</td>
                         <td>${requestsData.prime_val}</td>
                         <td>${requestsData.generator_val}</td>
                         <td>${requestsData.remark}</td>
                     `;
                     
                     requestsTableBody.appendChild(rowElement);
+                }
             });
         } else {
             console.error(`Error retrieving all patients: ${result}`);
@@ -381,115 +394,53 @@ async function retrieveDocbData(doctorId) {
     }
 }
 
-// function startVerification(prime, generator, docbId, docbToken){
-//     const port = 7777; 
-//     const url = `http://localhost:${port}/fs_agreed_params?prime=${prime}&generator=${generator}&docbToken=${docbToken}`; // Construct the URL with the specified port
-//     fetch(url)
-//         .then(response => response.text())
-//         .then(data => {
-//             console.log(data); // Output: "Hello from Python!"
-//             if(data.toString() == "1"){
-//                 alert("Authentication Successful");
-//                 updateStatus(docbId);
-//             } else {
-//                 alert("Authentication Not Successful");
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
+//#########################################################################################################################################
+//#########################################################################################################################################
+
+async function getPatientReport() {
+    const patientId = document.getElementById('patient-id').value;
+    const doctorId = document.getElementById('doctorID').value;
+    // const authToken = document.getElementById('authorization-token').value;
+    const authToken = doctorGlobalData.doctor_token;
     
-//     //set isVerified to true;
-// }
 
-// function discardRequest(docbId){
-//     const couchdbUrl = 'http://localhost:5984';
-//     const databaseName = 'dataaccessrequests';
-//     const updateUrl = `${couchdbUrl}/${databaseName}/${docbId}`;
+    const isVerified = await getRequestStatus(patientId, doctorId);
 
-//     // First, fetch the current document to get the _rev value
-//     fetch(updateUrl)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error(`Error fetching document for ID ${docbId}: ${response.statusText}`);
-//         }
-//         return response.json();
-//     })
-//     .then(doc => {
-//         // Include the _rev value from the fetched document in the update request
-//         return fetch(updateUrl, {
-//             method: 'PUT',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 _id: docbId,
-//                 _rev: doc._rev, // Include the _rev value here
-//                 patient_id: doc.patient_id,
-//                 docb_auth_token: doc.docb_auth_token,
-//                 prime_val: doc.prime_val,
-//                 generator_val: doc.generator_val,
-//                 remark: "Not agreed on variables",
-//                 is_verified: "false"
-//                 // Include other fields of the document if needed
-//             })
-//         });
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error(`Error updating is_verified status for ID ${docbId}: ${response.statusText}`);
-//         }
-//     })
-//     .catch(error => {
-//         console.error(`Error updating is_verified status for ID ${docbId}: ${error}`);
-//     });
-// }
+    if (isVerified) {
+        const apiUrl = `http://localhost:4000/channels/mychannel/chaincodes/fabcar?args=["${patientId}"]&peer=peer0.org1.example.com&fcn=getHistoryForAsset`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+        });
+
+        const historyData = await response.json();
+        console.log("The Asset History is:", JSON.stringify(historyData, null, 2));
+
+        // Store historyData in localStorage
+        localStorage.setItem('patientReportData', JSON.stringify(historyData));
+
+        // URL of the webpage you want to open
+        const reportUrl = "http://localhost:5000/org2/patientReport";
+        // Open the URL in a new tab
+        window.open(reportUrl, "_blank");
 
 
-// function updateStatus(docbId) {
-//     const couchdbUrl = 'http://localhost:5984';
-//     const databaseName = 'dataaccessrequests';
-//     const updateUrl = `${couchdbUrl}/${databaseName}/${docbId}`;
+        // Update dashboard with fetched data
+        // updateReport(historyData);
+    } catch (error) {
+        console.error('Error during asset history retrieval:', error);
+        // Handle error, maybe show a message to the user
+    }
 
-//     // First, fetch the current document to get the _rev value
-//     fetch(updateUrl)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error(`Error fetching document for ID ${docbId}: ${response.statusText}`);
-//         }
-//         return response.json();
-//     })
-//     .then(doc => {
-//         // Include the _rev value from the fetched document in the update request
-//         return fetch(updateUrl, {
-//             method: 'PUT',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 _id: docbId,
-//                 _rev: doc._rev, // Include the _rev value here
-//                 patient_id: doc.patient_id,
-//                 docb_auth_token: doc.docb_auth_token,
-//                 prime_val: doc.prime_val,
-//                 generator_val: doc.generator_val,
-//                 remark: doc.remark,
-//                 is_verified: "false"
-//                 // Include other fields of the document if needed
-//             })
-//         });
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error(`Error updating is_verified status for ID ${docbId}: ${response.statusText}`);
-//         }
-//     })
-//     .catch(error => {
-//         console.error(`Error updating is_verified status for ID ${docbId}: ${error}`);
-//     });
-// }
-
+    } else {
+        document.getElementById('history-table').style.display = 'none';
+    } 
+}
 
 //#########################################################################################################################################
-
 //#########################################################################################################################################
+

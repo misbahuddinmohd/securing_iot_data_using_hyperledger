@@ -5,56 +5,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Securing IoT Data using Hyperledger Fabric</title>
-    <!-- Keep only necessary styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
+        /* Reset default styles */
+        body, h1, h3, button {
+            margin: 0;
+            padding: 0;
             font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-image: url('img/backg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: #333;
         }
 
         .container {
-            margin-top: 50px;
+            text-align: center;
             max-width: 600px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h1 {
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .container h3 {
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
         }
 
         .btn-group label {
-            font-size: 20px; /* Adjust the font size as needed */
+            margin: 0 10px;
+            font-size: 20px;
+            font-weight: bold;
         }
 
-        button {
-            margin-top: 20px;
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 
 <body>
-    <div class="container text-center">
-        <h1 class="mb-4">Securing IoT Data using Hyperledger Fabric</h1>
-
-        <h3 class="mb-4">who are you..?</h3>
-
-        <!-- Role Buttons -->
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-outline-dark" onclick="gotoPage('admin')">
-                <input type="radio" name="role" value="admin"> Admin
-            </label>
-            <label class="btn btn-outline-dark" onclick="gotoPage('doctor')">
-                <input type="radio" name="role" value="doctor"> Doctor
-            </label>
-            <label class="btn btn-outline-dark" onclick="gotoPage('patient')">
-                <input type="radio" name="role" value="patient"> Patient
-            </label>
-            <label class="btn btn-outline-dark" onclick="gotoPage('org2')">
-                <input type="radio" name="role" value="patient"> Org2
-            </label>
+    <div class="container">
+        <h1>Securing IoT Data using Hyperledger Fabric</h1>
+        <h3>Who are you..?</h3>
+        <div class="btn-group" data-toggle="buttons">
+            <label onclick="gotoPage('admin')" class="btn">Admin</label>
+            <label onclick="gotoPage('doctor')" class="btn">Doctor</label>
+            <label onclick="gotoPage('patient')" class="btn">Patient</label>
+            <label onclick="gotoPage('org2')" class="btn">Org2</label>
         </div>
     </div>
-
-    <!-- Keep only necessary scripts -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         function gotoPage(role) {
