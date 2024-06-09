@@ -74,9 +74,11 @@ var getRegisteredUser = async function (username, userOrg, role, isJson) {
 			user = await client.setUserContext({ username: username, password: secret, attr_reqs: [{ name: 'role', optional: false }] });
 			// user = await client.setUserContext({ username: username, password: secret });
 			logger.debug('Successfully enrolled username %s  and setUserContext on the client object', username);
+
 		}
 		if (user && user.isEnrolled) {
 			if (isJson && isJson === true) {
+				logger.debug("The user details are: %s", user);
 				var response = {
 					success: true,
 					secret: user._enrollmentSecret,

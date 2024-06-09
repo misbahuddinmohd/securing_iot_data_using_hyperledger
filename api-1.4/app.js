@@ -185,12 +185,14 @@ app.post('/users', async function (req, res) {
 		logger.debug('Successfully registered the username %s for organization %s', username, orgName);
 		response.token = token;
 		res.json(response);
+		logger.debug(response);
 	} else {
 		logger.debug('Failed to register the username %s for organization %s with::%s', username, orgName, response);
 		res.json({ success: false, message: response });
 	}
 
 });
+
 // Create Channel
 app.post('/channels', async function (req, res) {
 	logger.info('<<<<<<<<<<<<<<<<< C R E A T E  C H A N N E L >>>>>>>>>>>>>>>>>');

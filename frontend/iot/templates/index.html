@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Sensor Data Viewer</h1>
-    <button onclick="startViewingData()">Start Viewing Data</button>
+    <button onclick="startViewingData()">Start Getting Data</button>
     <div id="sensorData"></div>
     <script>
         function startViewingData() {
@@ -18,7 +18,7 @@
             fetch('/get_sensor_data')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('sensorData').innerText = `Heart Rate: ${data.heartRate}, Temperature: ${data.temperature} C`;
+                    document.getElementById('sensorData').innerText = `Heart Rate: ${data.heartRate}, Temperature: ${data.temperature} F`;
                 });
         }
     </script>

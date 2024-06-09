@@ -6,12 +6,13 @@ def fiat_shamir():
 
     # Doc-B and Doc-A agree on p and G
     p = 701
-    G = random.randint(1, p)
+    G = 3
 
     # Doc-B hashes her password and computes her secret number s
     password = 'S3cr3t!'.encode('utf-8')
     digest = hashlib.md5(password).hexdigest()
     s = int(digest, 16) % p
+
 
     # Doc-B computes x and sends to Doc-A
     x = pow(G, s, p)
@@ -20,6 +21,7 @@ def fiat_shamir():
 
     # Doc-B chooses a random t, computes y, and sends to Doc-A
     t = random.randint(1, p)
+    print(G, t, p)
     y = pow(G, t, p)
 
     print(f'Doc-B -> Doc-A: y = {y}')
@@ -30,6 +32,7 @@ def fiat_shamir():
     print(f'Doc-A -> Doc-B: c = {c}')
 
     # Doc-B computes z and sends to Doc-A
+    print(t, c, s)
     z = (t - c * s)
 
     print(f'Doc-B -> Doc-A: z = {z}')

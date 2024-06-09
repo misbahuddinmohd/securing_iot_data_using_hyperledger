@@ -1,59 +1,63 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, session
 import random
 import hashlib
+import requests
 from flask_cors import CORS
+import time
 
 app = Flask(__name__)
-
 CORS(app)  # Enable CORS for all routes
+
+def getxy(prime, generator):
+    response = requests.get(f'http://localhost:7772/getxy?prime={prime}&generator={generator}')
+    data = response.json()
+    x = data['x']
+    y = data['y']
+    s = data['s']
+    t = data['t']
+    return x, y, s, t
+
+def sendc(c):
+    response = requests.get(f'http://localhost:7772/getc?c={c}')
+    data = response.json()
+    c = data['C']
+    return c
+
+
+def getz(s, t, c):
+    response = requests.get(f'http://localhost:7772/getz?s={s}&t={t}&c={c}')
+    data = response.json()
+    z = data['z']
+    return z
 
 
 def fiat_shamir(prime, generator, docbToken):
+    p=int(prime)
+    G=int(generator)
     # random.seed(101)
 
     #####################  FROM PROVER TO VERIFIER  #####################
     #####################################################################
 
-    # Doc-B and Doc-A agree on p and G
-    # p = 701
-    # G = random.randint(1, p)
-    p = int(prime)
-    G = int(generator)
-
-
-    # Doc-B hashes his password and computes his secret number s
-    password = 'S3cr3t!'.encode('utf-8')
-    digest = hashlib.md5(password).hexdigest()
-    s = int(digest, 16) % p
-    # digest = docbToken
-    # s = int(digest, 16) % p
-
-    # Doc-B computes x and sends to Doc-A
-    x = pow(G, s, p)
-
+    # Doc-B computes x, y and sends to Doc-A
+    x, y, s, t = getxy(prime, generator, )
     print(f'Doc-B -> Doc-A: x = {x}')
-
-    # Doc-B chooses a random t, computes y, and sends to Doc-A
-    t = random.randint(1, p)
-    y = pow(G, t, p)
-
     print(f'Doc-B -> Doc-A: y = {y}')
+
 
     #####################  FROM VERIFIER TO PROVER  #####################
     #####################################################################
 
     # Doc-A chooses a random c and sends to Doc-B
     c = random.randint(1, p)
-
     print(f'Doc-A -> Doc-B: c = {c}')
+    tp = sendc(c)
 
     #####################  FROM PROVER TO VERIFIER  #####################
     #####################################################################
-
-    # Doc-B computes z and sends to Doc-A (****** chnage  ********)
-    z = (t - c * s)
-    # z = 100
-
+    print(t, c, s)
+    z = getz(s, t, c)
+    z = int(z)
     print(f'Doc-B -> Doc-A: z = {z}')
 
     ######################  VERIFICATION PROCESS   ######################

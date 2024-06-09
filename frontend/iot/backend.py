@@ -25,7 +25,9 @@ def get_sensor_data():
         if raw_data:
             data.append(json.loads(raw_data))
             time.sleep(1)  # Delay for 1 second between readings
-
+    
+    print()
+    print("==========================================================")
     print(data)
 
     if data:
@@ -40,6 +42,7 @@ def get_sensor_data():
         print("#########")
         print(latest_sensor_data)
         print("#########")
+        print("==========================================================")
 
         return json.dumps({'heartRate': heart_rate_avg, 'temperature': temperature_avg})
 
@@ -47,6 +50,7 @@ def get_sensor_data():
 
 @app.route('/get_latest_sensor_data')
 def get_latest_sensor_data():
+    print(latest_sensor_data)
     return jsonify(latest_sensor_data)
 
 if __name__ == '__main__':

@@ -77,6 +77,7 @@ var getRegisteredUser = async function (username, userOrg, isJson) {
 		}
 		if (user && user.isEnrolled) {
 			if (isJson && isJson === true) {
+				logger.debug("The user details are: %s", user);
 				var response = {
 					success: true,
 					secret: user._enrollmentSecret,

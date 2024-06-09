@@ -14,29 +14,33 @@
     <div id="authForm">
         <h2>Request Data</h2>
         <form id="authForm">
-            <!-- <label for="doctorId">Enter Your Doctor ID:</label>
-            <input type="text" id="doctorId" required>
+            <label for="doctorLocalId">Enter Your Doctor ID:</label>
+            <input type="text" id="doctorLocalId" required>
             <br><br>
-            <label for="docbAuthToken">Authentication Token:</label>
+            <!-- <label for="docbAuthToken">Authentication Token:</label>
             <input type="text" id="docbAuthToken" required>
             <br><br> -->
-            <label for="doctoraId">Enter Verifier Doctor ID:</label>
+            <!-- <label for="doctoraId">Enter Verifier Doctor ID:</label>
             <input type="text" id="doctoraId" required>
-            <br><br>
+            <br><br> -->
             <label for="patientId">Enter Patient ID:</label>
             <input type="text" id="patientId" required>
             <br><br>
 
-            <h5>Variables for the ZKP algorithm (to be agreed by both parties)</h5>
+            <label for="docbLocalAuthToken">Authentication Token:</label>
+            <input type="text" id="docbLocalAuthToken" required>
+            <br><br>
+
+            <!-- <h5>Variables for the ZKP algorithm (to be agreed by both parties)</h5>
             <label for="prime">Enter a prime:</label>
             <input type="number" id="prime" required>
             <br>
             <label for="generator">Enter a generator value:</label>
             <input type="number" id="generator" required>
-            <br><br>
-            <label for="remark">Remark If any:</label>
+            <br><br> -->
+            <!-- <label for="remark">Remark If any:</label>
             <input type="text" id="remark">
-            <br><br>
+            <br><br> -->
             <button type="button" onclick="saveAccessRequest()">Request Data</button>
             <br><br>
             <p id="msg"></p>

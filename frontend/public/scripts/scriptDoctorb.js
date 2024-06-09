@@ -288,24 +288,19 @@ async function getRequestStatus(patientId, doctorId) {
 
 function saveAccessRequest() {
     const patientId = document.getElementById('patientId').value;
-    const doctorId = document.getElementById('doctorID').value;
-    const doctoraId = document.getElementById('doctoraId').value;
-    // const docbAuthToken = document.getElementById('docbAuthToken').value;
-    const docbAuthToken = doctorGlobalData.doctor_token;
+    const doctorId = document.getElementById('doctorLocalId').value;
+    // const doctoraId = document.getElementById('doctoraId').value;
+    // const docbAuthToken = doctorGlobalData.doctor_token;
+    const docbAuthToken = document.getElementById('docbLocalAuthToken').value;
 
-    const prime = document.getElementById('prime').value;
-    const generator = document.getElementById('generator').value;
-    const remark = document.getElementById('remark').value;
     const isVerified = "false";
     const data = {
         _id: doctorId,
-        doctora_id: doctoraId,
+        doctora_id: "DOCTOR1",
         patient_id: patientId,
         docb_auth_token: docbAuthToken,
-        prime_val: prime,
-        generator_val: generator,
-        remark: remark,
-        is_verified: isVerified,
+        remark: "not authenticated",
+        is_verified: "false",
     };
   
     // Make a request to store doctor data in CouchDB
@@ -328,10 +323,51 @@ function saveAccessRequest() {
 }
 
 
-//#########################################################################################################################################
+// function saveAccessRequest() {
+//     const patientId = document.getElementById('patientId').value;
+//     const doctorId = document.getElementById('doctorID').value;
+//     const doctoraId = document.getElementById('doctoraId').value;
+//     // const docbAuthToken = document.getElementById('docbAuthToken').value;
+//     const docbAuthToken = doctorGlobalData.doctor_token;
+
+//     const prime = document.getElementById('prime').value;
+//     const generator = document.getElementById('generator').value;
+//     const remark = document.getElementById('remark').value;
+//     const isVerified = "false";
+//     const data = {
+//         _id: doctorId,
+//         doctora_id: doctoraId,
+//         patient_id: patientId,
+//         docb_auth_token: docbAuthToken,
+//         prime_val: prime,
+//         generator_val: generator,
+//         remark: remark,
+//         is_verified: isVerified,
+//     };
+  
+//     // Make a request to store doctor data in CouchDB
+//     fetch('http://localhost:5984/dataaccessrequests', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(data),
+//     })
+//         .then(response => response.json())
+//         .then(savedData => {
+//             document.getElementById('msg').innerText = 'Request sent';
+//             console.log('Doctor Access Request stored successfully:', savedData);
+//         })
+//         .catch(error => {
+//             document.getElementById('msg').innerText = 'Error sending request';
+//             console.error('Error storing doctor Access Request:', error);
+//         });
+// }
+
 
 //#########################################################################################################################################
 
+//#########################################################################################################################################
 
 async function getRequests() {
     const couchdbUrl = 'http://localhost:5984';
@@ -351,17 +387,13 @@ async function getRequests() {
                 const requestsData = await retrieveDocbData(doctorId);
                 
                 // Check if is_verified is "false" before creating the row element
-                if (requestsData.is_verified == "false" && requestsData._id == document.getElementById('doctorID').value) {
+                if (requestsData._id == document.getElementById('doctorID').value) {
                     const rowElement = document.createElement('tr');
                     rowElement.innerHTML = `
                         <td>${requestsData._id}</td>
                         <td>${requestsData.patient_id}</td>
-                        <td>${requestsData.doctora_id}</td>
-                        <td>${requestsData.prime_val}</td>
-                        <td>${requestsData.generator_val}</td>
                         <td>${requestsData.remark}</td>
                     `;
-                    
                     requestsTableBody.appendChild(rowElement);
                 }
             });
@@ -393,6 +425,66 @@ async function retrieveDocbData(doctorId) {
         return {};
     }
 }
+// async function getRequests() {
+//     const couchdbUrl = 'http://localhost:5984';
+//     const databaseName = 'dataaccessrequests';
+//     const retrieveAllUrl = `${couchdbUrl}/${databaseName}/_all_docs`;
+
+//     try {
+//         const response = await fetch(retrieveAllUrl);
+//         const result = await response.json();
+
+//         if (response.ok) {
+//             const requestsTableBody = document.getElementById('requestsTableBody');
+//             requestsTableBody.innerHTML = '';
+
+//             result.rows.forEach(async (row) => {
+//                 const doctorId = row.id;
+//                 const requestsData = await retrieveDocbData(doctorId);
+                
+//                 // Check if is_verified is "false" before creating the row element
+//                 if (requestsData.is_verified == "false" && requestsData._id == document.getElementById('doctorID').value) {
+//                     const rowElement = document.createElement('tr');
+//                     rowElement.innerHTML = `
+//                         <td>${requestsData._id}</td>
+//                         <td>${requestsData.patient_id}</td>
+//                         <td>${requestsData.doctora_id}</td>
+//                         <td>${requestsData.prime_val}</td>
+//                         <td>${requestsData.generator_val}</td>
+//                         <td>${requestsData.remark}</td>
+//                     `;
+                    
+//                     requestsTableBody.appendChild(rowElement);
+//                 }
+//             });
+//         } else {
+//             console.error(`Error retrieving all patients: ${result}`);
+//         }
+//     } catch (error) {
+//         console.error(`Error retrieving all patients: ${error.message}`);
+//     }
+// }
+
+// async function retrieveDocbData(doctorId) {
+//     const couchdbUrl = 'http://localhost:5984';
+//     const databaseName = 'dataaccessrequests';
+//     const retrieveUrl = `${couchdbUrl}/${databaseName}/${doctorId}`;
+
+//     try {
+//         const response = await fetch(retrieveUrl);
+//         const result = await response.json();
+
+//         if (response.ok) {
+//             return result;
+//         } else {
+//             console.error(`Error retrieving data for ID ${doctorId}: ${result}`);
+//             return {};
+//         }
+//     } catch (error) {
+//         console.error(`Error retrieving data for ID ${doctorId}: ${error.message}`);
+//         return {};
+//     }
+// }
 
 //#########################################################################################################################################
 //#########################################################################################################################################
